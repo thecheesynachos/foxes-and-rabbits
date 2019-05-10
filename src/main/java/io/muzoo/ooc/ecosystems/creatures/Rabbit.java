@@ -24,6 +24,9 @@ public class Rabbit extends Animal{
     private static final double BREEDING_PROBABILITY = 0.15;
     // The maximum number of births.
     private static final int MAX_LITTER_SIZE = 5;
+    // The food value of a single rabbit. In effect, this is the
+    // number of steps a fox can go before it has to eat again.
+    static final int RABBIT_FOOD_VALUE = 5;
 
     /**
      * Create a new rabbit. A rabbit may be created with age
@@ -45,13 +48,6 @@ public class Rabbit extends Animal{
     protected void incrementHunger() { }
 
 
-    /**
-     * Tell the rabbit that it's dead now :(
-     */
-    public void setEaten() {
-        alive = false;
-    }
-
     @Override
     public int getBreedingAge() {
         return BREEDING_AGE;
@@ -70,6 +66,11 @@ public class Rabbit extends Animal{
     @Override
     public int getMaxLitterSize() {
         return MAX_LITTER_SIZE;
+    }
+
+    @Override
+    int getFoodValue() {
+        return RABBIT_FOOD_VALUE;
     }
 
     @Override

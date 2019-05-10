@@ -3,6 +3,7 @@ package io.muzoo.ooc.ecosystems.creatures;
 import io.muzoo.ooc.ecosystems.location.Field;
 import io.muzoo.ooc.ecosystems.location.Location;
 
+import java.util.Iterator;
 import java.util.List;
 
 public abstract class Animal extends Actor{
@@ -11,6 +12,8 @@ public abstract class Animal extends Actor{
     private int age;
     // Whether the animal is alive or not.
     boolean alive;
+    // The fox's food level, which is increased by eating rabbits.
+    int foodLevel;
 
     /**
      * Create an animal. An animal can be created as a new born (age zero
@@ -98,6 +101,12 @@ public abstract class Animal extends Actor{
         return births;
     }
 
+    /**
+     * Tell the animal that it's dead now :(
+     */
+    public void setEaten() {
+        alive = false;
+    }
 
     protected abstract void incrementHunger();
 
@@ -109,11 +118,30 @@ public abstract class Animal extends Actor{
 
     public abstract int getMaxLitterSize();
 
+    abstract int getFoodValue();
+
     /**
      * Generate a new instance of certain animal
      *
      * @return new Animal (of specific species)
      */
     protected abstract Animal generateNewAnimal();
+
+    public Location huntForPrey(Field field, Location location, Class<? extends Animal> preySpecies){
+        Iterator<Location> adjacentLocations = field.adjacentLocations(location);
+        while (adjacentLocations.hasNext()) {
+            Location where = adjacentLocations.next();
+            Actor actor = field.getActorAt(where);
+            if (actor != null && actor.getClass() == preySpecies) {
+                Animal prey = (Animal) actor;
+                if (prey.isAlive()) {
+                    prey.setEaten();
+                    foodLevel = prey.getFoodValue();
+                    return where;
+                }
+            }
+        }
+        return null;
+    }
 
 }

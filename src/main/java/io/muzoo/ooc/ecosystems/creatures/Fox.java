@@ -24,14 +24,10 @@ public class Fox extends Animal {
     private static final double BREEDING_PROBABILITY = 0.09;
     // The maximum number of births.
     private static final int MAX_LITTER_SIZE = 3;
-    // The food value of a single rabbit. In effect, this is the
-    // number of steps a fox can go before it has to eat again.
-    private static final int RABBIT_FOOD_VALUE = 4;
+    // The food value of a single fox
+    static final int FOX_FOOD_VALUE = 15;
 
     // Individual characteristics (instance fields).
-
-    // The fox's food level, which is increased by eating rabbits.
-    private int foodLevel;
 
     /**
      * Create a fox. A fox can be created as a new born (age zero
@@ -42,16 +38,16 @@ public class Fox extends Animal {
     public Fox(boolean randomAge) {
         super(randomAge);
         if (randomAge) {
-            foodLevel = rand.nextInt(RABBIT_FOOD_VALUE);
+            foodLevel = rand.nextInt(Rabbit.RABBIT_FOOD_VALUE);
         } else {
-            foodLevel = RABBIT_FOOD_VALUE;
+            foodLevel = Rabbit.RABBIT_FOOD_VALUE;
         }
     }
 
 
     @Override
     protected Location nextLocation(Field currentField, Field updatedField) {
-        Location newLocation = findFood(currentField, location);
+        Location newLocation = huntForPrey(currentField, location, Rabbit.class);
         if (newLocation == null) {  // no food found - move randomly
             newLocation = updatedField.freeAdjacentLocation(location);
         }
@@ -66,31 +62,6 @@ public class Fox extends Animal {
         if (foodLevel <= 0) {
             alive = false;
         }
-    }
-
-    /**
-     * Tell the fox to look for rabbits adjacent to its current location.
-     *
-     * @param field    The field in which it must look.
-     * @param location Where in the field it is located.
-     * @return Where food was found, or null if it wasn't.
-     */
-    private Location findFood(Field field, Location location) {
-        Iterator<Location> adjacentLocations =
-                field.adjacentLocations(location);
-        while (adjacentLocations.hasNext()) {
-            Location where = adjacentLocations.next();
-            Actor actor = field.getActorAt(where);
-            if (actor instanceof Rabbit) {
-                Rabbit rabbit = (Rabbit) actor;
-                if (rabbit.isAlive()) {
-                    rabbit.setEaten();
-                    foodLevel = RABBIT_FOOD_VALUE;
-                    return where;
-                }
-            }
-        }
-        return null;
     }
 
     @Override
@@ -114,8 +85,20 @@ public class Fox extends Animal {
     }
 
     @Override
+    int getFoodValue() {
+        return FOX_FOOD_VALUE;
+    }
+
+    @Override
     protected Animal generateNewAnimal() {
         return new Fox(true);
+    }
+
+    /**
+     * Tell the fox that it's dead now :(
+     */
+    public void setEaten() {
+        alive = false;
     }
 
 }

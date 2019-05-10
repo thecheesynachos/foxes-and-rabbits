@@ -1,10 +1,7 @@
 package io.muzoo.ooc.ecosystems.simulation;
 
-import io.muzoo.ooc.ecosystems.creatures.Animal;
-import io.muzoo.ooc.ecosystems.creatures.AnimalFactory;
+import io.muzoo.ooc.ecosystems.creatures.*;
 import io.muzoo.ooc.ecosystems.location.Field;
-import io.muzoo.ooc.ecosystems.creatures.Fox;
-import io.muzoo.ooc.ecosystems.creatures.Rabbit;
 
 import java.util.Random;
 import java.util.List;
@@ -69,7 +66,8 @@ public class Simulator {
         // Create a view of the state of each location in the field.
         view = new SimulatorView(depth, width);
         view.setColor(Fox.class, Color.blue);
-        view.setColor(Rabbit.class, Color.orange);
+        view.setColor(Rabbit.class, Color.yellow);
+        view.setColor(Tiger.class, Color.red);
 
         // Setup a valid starting point.
         reset();
