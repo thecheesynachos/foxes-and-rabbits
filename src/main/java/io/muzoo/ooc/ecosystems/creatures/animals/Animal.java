@@ -104,7 +104,7 @@ public abstract class Animal extends Actor{
     /**
      * Tell the animal that it's dead now :(
      */
-    public void setEaten() {
+    public void setDead() {
         alive = false;
     }
 
@@ -135,7 +135,7 @@ public abstract class Animal extends Actor{
             if (actor != null && actor.getClass() == preySpecies) {
                 Animal prey = (Animal) actor;
                 if (prey.isAlive()) {
-                    prey.setEaten();
+                    prey.setDead();
                     foodLevel = prey.getFoodValue();
                     return where;
                 }

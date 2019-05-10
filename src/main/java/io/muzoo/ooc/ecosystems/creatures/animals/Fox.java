@@ -97,7 +97,7 @@ public class Fox extends Animal {
     /**
      * Tell the fox that it's dead now :(
      */
-    public void setEaten() {
+    public void setDead() {
         alive = false;
     }
 

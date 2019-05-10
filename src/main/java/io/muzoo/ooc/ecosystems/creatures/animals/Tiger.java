@@ -18,7 +18,6 @@ public class Tiger extends Animal {
     private static final int FOX_FOOD_VALUE = 10;
     // The food value of a single tiger
     static final int TIGER_FOOD_VALUE = 30;
-
     // The tiger's food level, which is increased by eating foxes.
     private int foodLevel;
 
