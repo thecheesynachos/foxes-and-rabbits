@@ -1,7 +1,9 @@
 package io.muzoo.ooc.ecosystems.creatures;
 
+import io.muzoo.ooc.ecosystems.location.Field;
 import io.muzoo.ooc.ecosystems.location.Location;
 
+import java.util.List;
 import java.util.Random;
 
 public abstract class Animal {
@@ -101,5 +103,14 @@ public abstract class Animal {
     public abstract double getBreedingProbability();
 
     public abstract int getMaxLitterSize();
+
+    /**
+     * This includes actions that is done by an animal at a time
+     *
+     * @param currentField The field currently occupied.
+     * @param updatedField The field to transfer to.
+     * @param newAnimals     A list to add newly born foxes to.
+     */
+    public abstract void act(Field currentField, Field updatedField, List<Animal> newAnimals);
 
 }
