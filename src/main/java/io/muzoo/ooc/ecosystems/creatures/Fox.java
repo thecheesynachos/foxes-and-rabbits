@@ -5,7 +5,6 @@ import io.muzoo.ooc.ecosystems.location.Location;
 
 import java.util.List;
 import java.util.Iterator;
-import java.util.Random;
 
 /**
  * A simple model of a fox.
@@ -104,13 +103,13 @@ public class Fox extends Animal {
      * @return Where food was found, or null if it wasn't.
      */
     private Location findFood(Field field, Location location) {
-        Iterator adjacentLocations =
+        Iterator<Location> adjacentLocations =
                 field.adjacentLocations(location);
         while (adjacentLocations.hasNext()) {
-            Location where = (Location) adjacentLocations.next();
-            Object animal = field.getObjectAt(where);
-            if (animal instanceof Rabbit) {
-                Rabbit rabbit = (Rabbit) animal;
+            Location where = adjacentLocations.next();
+            Actor actor = field.getActorAt(where);
+            if (actor instanceof Rabbit) {
+                Rabbit rabbit = (Rabbit) actor;
                 if (rabbit.isAlive()) {
                     rabbit.setEaten();
                     foodLevel = RABBIT_FOOD_VALUE;
@@ -140,4 +139,5 @@ public class Fox extends Animal {
     public int getMaxLitterSize() {
         return MAX_LITTER_SIZE;
     }
+
 }

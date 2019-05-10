@@ -92,4 +92,5 @@ public class Rabbit extends Animal{
     public int getMaxLitterSize() {
         return MAX_LITTER_SIZE;
     }
+
 }
