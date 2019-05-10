@@ -1,6 +1,7 @@
 package io.muzoo.ooc.ecosystems;
 
-import java.awt.Color;
+import io.muzoo.ooc.ecosystems.simulation.Counter;
+
 import java.util.HashMap;
 import java.util.Iterator;
 

@@ -11,7 +11,7 @@ import java.util.Random;
  * @author David J. Barnes and Michael Kolling
  * @version 2002.10.28
  */
-public class Fox {
+public class Fox extends Animal {
     // Characteristics shared by all foxes (static fields).
 
     // The age at which a fox can start to breed.
@@ -30,12 +30,6 @@ public class Fox {
 
     // Individual characteristics (instance fields).
 
-    // The fox's age.
-    private int age;
-    // Whether the fox is alive or not.
-    private boolean alive;
-    // The fox's position
-    private Location location;
     // The fox's food level, which is increased by eating rabbits.
     private int foodLevel;
 
@@ -160,31 +154,4 @@ public class Fox {
         return age >= BREEDING_AGE;
     }
 
-    /**
-     * Check whether the fox is alive or not.
-     *
-     * @return True if the fox is still alive.
-     */
-    public boolean isAlive() {
-        return alive;
-    }
-
-    /**
-     * Set the animal's location.
-     *
-     * @param row The vertical coordinate of the location.
-     * @param col The horizontal coordinate of the location.
-     */
-    public void setLocation(int row, int col) {
-        this.location = new Location(row, col);
-    }
-
-    /**
-     * Set the fox's location.
-     *
-     * @param location The fox's location.
-     */
-    public void setLocation(Location location) {
-        this.location = location;
-    }
 }
