@@ -1,10 +1,7 @@
-package io.muzoo.ooc.ecosystems.creatures;
+package io.muzoo.ooc.ecosystems.creatures.animals;
 
 import io.muzoo.ooc.ecosystems.location.Field;
 import io.muzoo.ooc.ecosystems.location.Location;
-
-import java.util.List;
-import java.util.Iterator;
 
 /**
  * A simple model of a fox.

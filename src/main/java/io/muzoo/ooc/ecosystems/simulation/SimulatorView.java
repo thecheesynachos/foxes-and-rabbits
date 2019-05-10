@@ -1,5 +1,6 @@
 package io.muzoo.ooc.ecosystems.simulation;
 
+import io.muzoo.ooc.ecosystems.creatures.Actor;
 import io.muzoo.ooc.ecosystems.location.Field;
 import io.muzoo.ooc.ecosystems.location.FieldStats;
 
@@ -97,7 +98,7 @@ public class SimulatorView extends JFrame {
 
         for (int row = 0; row < field.getDepth(); row++) {
             for (int col = 0; col < field.getWidth(); col++) {
-                Object animal = field.getActorAt(row, col);
+                Actor animal = field.getActorAt(row, col);
                 if (animal != null) {
                     stats.incrementCount(animal.getClass());
                     fieldView.drawMark(col, row, getColor(animal.getClass()));

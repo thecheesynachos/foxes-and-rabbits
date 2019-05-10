@@ -1,9 +1,12 @@
 package io.muzoo.ooc.ecosystems.simulation;
 
 import io.muzoo.ooc.ecosystems.creatures.*;
+import io.muzoo.ooc.ecosystems.creatures.animals.Animal;
+import io.muzoo.ooc.ecosystems.creatures.animals.Fox;
+import io.muzoo.ooc.ecosystems.creatures.animals.Rabbit;
+import io.muzoo.ooc.ecosystems.creatures.animals.Tiger;
 import io.muzoo.ooc.ecosystems.location.Field;
 
-import java.util.Random;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -25,9 +28,9 @@ public class Simulator {
     // The default depth of the grid.
     private static final int DEFAULT_DEPTH = 50;
 
-    // The list of animals in the field
-    private List<Animal> animals;
-    // The list of animals just born
+    // The list of actors in the field
+    private List<Actor> actors;
+    // The list of actors just born
     private List<Animal> newAnimals;
     // The current state of the field.
     private Field field;
@@ -58,7 +61,7 @@ public class Simulator {
             depth = DEFAULT_DEPTH;
             width = DEFAULT_WIDTH;
         }
-        animals = new ArrayList<>();
+        actors = new ArrayList<>();
         newAnimals = new ArrayList<>();
         field = new Field(depth, width);
         updatedField = new Field(depth, width);
@@ -68,6 +71,7 @@ public class Simulator {
         view.setColor(Fox.class, Color.blue);
         view.setColor(Rabbit.class, Color.yellow);
         view.setColor(Tiger.class, Color.red);
+        view.setColor(Hunter.class, Color.black);
 
         // Setup a valid starting point.
         reset();
@@ -100,13 +104,12 @@ public class Simulator {
         step++;
         newAnimals.clear();
 
-        // let all animals act
-        for (Iterator<Animal> iter = animals.iterator(); iter.hasNext(); ) {
-            Animal animal = iter.next();
-            animal.act(field, updatedField, newAnimals);
+        // let all actors act
+        for (Actor actor : actors) {
+            actor.act(field, updatedField, newAnimals);
         }
-        // add new born animals to the list of animals
-        animals.addAll(newAnimals);
+        // add new born actors to the list of actors
+        actors.addAll(newAnimals);
 
         // Swap the field and updatedField at the end of the step.
         Field temp = field;
@@ -123,7 +126,7 @@ public class Simulator {
      */
     public void reset() {
         step = 0;
-        animals.clear();
+        actors.clear();
         field.clear();
         updatedField.clear();
         populate(field);
@@ -138,18 +141,18 @@ public class Simulator {
      * @param field The field to be populated.
      */
     private void populate(Field field) {
-        AnimalFactory animalFactory = new AnimalFactory();
+        ActorFactory actorFactory = new ActorFactory();
         field.clear();
         for (int row = 0; row < field.getDepth(); row++) {
             for (int col = 0; col < field.getWidth(); col++) {
-                Animal animal = animalFactory.generateAnimal(true);
-                if(animal != null) {
-                    animals.add(animal);
-                    animal.setLocation(row, col);
-                    field.place(animal, row, col);
+                Actor actor = actorFactory.generateActor(true);
+                if(actor != null) {
+                    actors.add(actor);
+                    actor.setLocation(row, col);
+                    field.place(actor, row, col);
                 } // else leave the location empty.
             }
         }
-        Collections.shuffle(animals);
+        Collections.shuffle(actors);
     }
 }

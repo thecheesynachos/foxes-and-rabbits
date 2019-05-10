@@ -1,17 +1,16 @@
-package io.muzoo.ooc.ecosystems.creatures;
+package io.muzoo.ooc.ecosystems.creatures.animals;
 
+import io.muzoo.ooc.ecosystems.creatures.Actor;
 import io.muzoo.ooc.ecosystems.location.Field;
 import io.muzoo.ooc.ecosystems.location.Location;
 
 import java.util.Iterator;
 import java.util.List;
 
-public abstract class Animal extends Actor{
+public abstract class Animal extends Actor {
 
     // The animal's age.
     private int age;
-    // Whether the animal is alive or not.
-    boolean alive;
     // The fox's food level, which is increased by eating rabbits.
     int foodLevel;
 
@@ -28,15 +27,6 @@ public abstract class Animal extends Actor{
         if (randomAge) {
             age = rand.nextInt(getMaxAge());
         }
-    }
-
-    /**
-     * Check whether the animal is alive or not.
-     *
-     * @return True if the animal is still alive.
-     */
-    boolean isAlive() {
-        return alive;
     }
 
 

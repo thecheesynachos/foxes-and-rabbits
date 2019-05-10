@@ -1,5 +1,6 @@
 package io.muzoo.ooc.ecosystems.creatures;
 
+import io.muzoo.ooc.ecosystems.creatures.animals.Animal;
 import io.muzoo.ooc.ecosystems.location.Field;
 import io.muzoo.ooc.ecosystems.location.Location;
 
@@ -9,10 +10,12 @@ import java.util.Random;
 public abstract class Actor {
 
     // The actor's position
-    Location location;
+    protected Location location;
+    // Whether the actor is alive or not.
+    protected boolean alive;
 
     // A shared random number generator to control breeding.
-    static final Random rand = new Random();
+    protected static final Random rand = new Random();
 
     /**
      * Set the animal's location.
@@ -25,12 +28,22 @@ public abstract class Actor {
     }
 
     /**
-     * Set the animal's location.
+     * Set the actor's location.
      *
      * @param location The fox's location.
      */
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+
+    /**
+     * Check whether the animal is alive or not.
+     *
+     * @return True if the animal is still alive.
+     */
+    public boolean isAlive() {
+        return alive;
     }
 
     /**
@@ -43,8 +56,8 @@ public abstract class Actor {
     public abstract void act(Field currentField, Field updatedField, List<Animal> newAnimals);
 
     /**
-     * Find the next location that the animal goes to
-     * How this is chosen should depend on the type of animal (e.g. find food, random, run away)
+     * Find the next location that the actor goes to
+     * How this is chosen should depend on the type of actor (e.g. find food, random, run away)
      */
     protected abstract Location nextLocation(Field currentField, Field updatedField);
 

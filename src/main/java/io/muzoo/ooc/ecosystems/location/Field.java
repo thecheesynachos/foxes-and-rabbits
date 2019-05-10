@@ -50,7 +50,7 @@ public class Field {
      * If there is already an animal at the location it will
      * be lost.
      *
-     * @param actor  The animal to be placed.
+     * @param actor  The actor to be placed.
      * @param row    Row coordinate of the location.
      * @param col    Column coordinate of the location.
      */
@@ -63,7 +63,7 @@ public class Field {
      * If there is already an animal at the location it will
      * be lost.
      *
-     * @param actor   The animal to be placed.
+     * @param actor   The actor to be placed.
      * @param location Where to place the animal.
      */
     public void place(Actor actor, Location location) {
@@ -71,7 +71,7 @@ public class Field {
     }
 
     /**
-     * Return the animal at the given location, if any.
+     * Return the actor at the given location, if any.
      *
      * @param location Where in the field.
      * @return The animal at the given location, or null if there is none.
