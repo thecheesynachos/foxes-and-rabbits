@@ -42,4 +42,10 @@ public abstract class Actor {
      */
     public abstract void act(Field currentField, Field updatedField, List<Animal> newAnimals);
 
+    /**
+     * Find the next location that the animal goes to
+     * How this is chosen should depend on the type of animal (e.g. find food, random, run away)
+     */
+    protected abstract Location nextLocation(Field currentField, Field updatedField);
+
 }

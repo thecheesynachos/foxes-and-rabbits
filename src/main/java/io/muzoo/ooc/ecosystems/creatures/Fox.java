@@ -48,47 +48,20 @@ public class Fox extends Animal {
         }
     }
 
-    /**
-     * This is what the fox does most of the time: it hunts for
-     * rabbits. In the process, it might breed, die of hunger,
-     * or die of old age.
-     *
-     * @param currentField The field currently occupied.
-     * @param updatedField The field to transfer to.
-     * @param newFoxes     A list to add newly born foxes to.
-     */
-    public void act(Field currentField, Field updatedField, List<Animal> newFoxes) {
-        incrementAge();
-        incrementHunger();
-        if (alive) {
-            // New foxes are born into adjacent locations.
-            int births = breed();
-            for (int b = 0; b < births; b++) {
-                Fox newFox = new Fox(false);
-                newFoxes.add(newFox);
-                Location loc = updatedField.randomAdjacentLocation(location);
-                newFox.setLocation(loc);
-                updatedField.place(newFox, loc);
-            }
-            // Move towards the source of food if found.
-            Location newLocation = findFood(currentField, location);
-            if (newLocation == null) {  // no food found - move randomly
-                newLocation = updatedField.freeAdjacentLocation(location);
-            }
-            if (newLocation != null) {
-                setLocation(newLocation);
-                updatedField.place(this, newLocation);
-            } else {
-                // can neither move nor stay - overcrowding - all locations taken
-                alive = false;
-            }
+
+    @Override
+    protected Location nextLocation(Field currentField, Field updatedField) {
+        Location newLocation = findFood(currentField, location);
+        if (newLocation == null) {  // no food found - move randomly
+            newLocation = updatedField.freeAdjacentLocation(location);
         }
+        return newLocation;
     }
 
     /**
      * Make this fox more hungry. This could result in the fox's death.
      */
-    private void incrementHunger() {
+    protected void incrementHunger() {
         foodLevel--;
         if (foodLevel <= 0) {
             alive = false;
@@ -138,6 +111,11 @@ public class Fox extends Animal {
     @Override
     public int getMaxLitterSize() {
         return MAX_LITTER_SIZE;
+    }
+
+    @Override
+    protected Animal generateNewAnimal() {
+        return new Fox(true);
     }
 
 }

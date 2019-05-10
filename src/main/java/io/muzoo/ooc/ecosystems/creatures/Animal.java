@@ -1,9 +1,14 @@
 package io.muzoo.ooc.ecosystems.creatures;
 
+import io.muzoo.ooc.ecosystems.location.Field;
+import io.muzoo.ooc.ecosystems.location.Location;
+
+import java.util.List;
+
 public abstract class Animal extends Actor{
 
     // The animal's age.
-    int age;
+    private int age;
     // Whether the animal is alive or not.
     boolean alive;
 
@@ -13,7 +18,7 @@ public abstract class Animal extends Actor{
      *
      * @param randomAge If true, the animal will have random age and hunger level.
      */
-    public Animal(boolean randomAge){
+    Animal(boolean randomAge){
         super();
         age = 0;
         alive = true;
@@ -27,7 +32,7 @@ public abstract class Animal extends Actor{
      *
      * @return True if the animal is still alive.
      */
-    public boolean isAlive() {
+    boolean isAlive() {
         return alive;
     }
 
@@ -35,8 +40,47 @@ public abstract class Animal extends Actor{
     /**
      * An animal can breed if it has reached the breeding age.
      */
-    protected boolean canBreed() {
+    boolean canBreed() {
         return age >= getBreedingAge();
+    }
+
+
+    /**
+     * Increase the age.
+     * This could result in the animal's death.
+     */
+    private void incrementAge() {
+        age++;
+        if (age > getMaxAge()) {
+            alive = false;
+        }
+    }
+
+    public void act(Field currentField, Field updatedField, List<Animal> newAnimals){
+        incrementAge();
+        incrementHunger();
+        if(alive) {
+            createOffspring(updatedField, newAnimals);
+            Location nextLocation = nextLocation(currentField, updatedField);
+            if (nextLocation != null) {
+                setLocation(nextLocation);
+                updatedField.place(this, nextLocation);
+            } else {
+                // can neither move nor stay - overcrowding - all locations taken
+                alive = false;
+            }
+        }
+    }
+
+    private void createOffspring(Field updatedField, List<Animal> newAnimals){
+        int births = breed();
+        for (int b = 0; b < births; b++) {
+            Animal newAnimal = generateNewAnimal();
+            newAnimals.add(newAnimal);
+            Location loc = updatedField.randomAdjacentLocation(location);
+            newAnimal.setLocation(loc);
+            updatedField.place(newAnimal, loc);
+        }
     }
 
 
@@ -46,7 +90,7 @@ public abstract class Animal extends Actor{
      *
      * @return The number of births (may be zero).
      */
-    protected int breed() {
+    private int breed() {
         int births = 0;
         if (canBreed() && rand.nextDouble() <= getBreedingProbability()) {
             births = rand.nextInt(getMaxLitterSize()) + 1;
@@ -54,16 +98,8 @@ public abstract class Animal extends Actor{
         return births;
     }
 
-    /**
-     * Increase the age.
-     * This could result in the animal's death.
-     */
-    protected void incrementAge() {
-        age++;
-        if (age > getMaxAge()) {
-            alive = false;
-        }
-    }
+
+    protected abstract void incrementHunger();
 
     public abstract int getBreedingAge();
 
@@ -72,5 +108,12 @@ public abstract class Animal extends Actor{
     public abstract double getBreedingProbability();
 
     public abstract int getMaxLitterSize();
+
+    /**
+     * Generate a new instance of certain animal
+     *
+     * @return new Animal (of specific species)
+     */
+    protected abstract Animal generateNewAnimal();
 
 }
