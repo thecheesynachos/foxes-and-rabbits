@@ -1,4 +1,4 @@
-package io.muzoo.ooc.ecosystems;
+package io.muzoo.ooc.ecosystems.location;
 
 import io.muzoo.ooc.ecosystems.simulation.Counter;
 

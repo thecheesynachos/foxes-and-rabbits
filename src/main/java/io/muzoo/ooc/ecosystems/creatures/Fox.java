@@ -1,4 +1,7 @@
-package io.muzoo.ooc.ecosystems;
+package io.muzoo.ooc.ecosystems.creatures;
+
+import io.muzoo.ooc.ecosystems.location.Field;
+import io.muzoo.ooc.ecosystems.location.Location;
 
 import java.util.List;
 import java.util.Iterator;
@@ -25,8 +28,6 @@ public class Fox extends Animal {
     // The food value of a single rabbit. In effect, this is the
     // number of steps a fox can go before it has to eat again.
     private static final int RABBIT_FOOD_VALUE = 4;
-    // A shared random number generator to control breeding.
-    private static final Random rand = new Random();
 
     // Individual characteristics (instance fields).
 
@@ -40,13 +41,10 @@ public class Fox extends Animal {
      * @param randomAge If true, the fox will have random age and hunger level.
      */
     public Fox(boolean randomAge) {
-        age = 0;
-        alive = true;
+        super(randomAge);
         if (randomAge) {
-            age = rand.nextInt(MAX_AGE);
             foodLevel = rand.nextInt(RABBIT_FOOD_VALUE);
         } else {
-            // leave age at 0
             foodLevel = RABBIT_FOOD_VALUE;
         }
     }
@@ -89,16 +87,6 @@ public class Fox extends Animal {
     }
 
     /**
-     * Increase the age. This could result in the fox's death.
-     */
-    private void incrementAge() {
-        age++;
-        if (age > MAX_AGE) {
-            alive = false;
-        }
-    }
-
-    /**
      * Make this fox more hungry. This could result in the fox's death.
      */
     private void incrementHunger() {
@@ -133,25 +121,23 @@ public class Fox extends Animal {
         return null;
     }
 
-    /**
-     * Generate a number representing the number of births,
-     * if it can breed.
-     *
-     * @return The number of births (may be zero).
-     */
-    private int breed() {
-        int births = 0;
-        if (canBreed() && rand.nextDouble() <= BREEDING_PROBABILITY) {
-            births = rand.nextInt(MAX_LITTER_SIZE) + 1;
-        }
-        return births;
+    @Override
+    public int getBreedingAge() {
+        return BREEDING_AGE;
     }
 
-    /**
-     * A fox can breed if it has reached the breeding age.
-     */
-    private boolean canBreed() {
-        return age >= BREEDING_AGE;
+    @Override
+    public int getMaxAge() {
+        return MAX_AGE;
     }
 
+    @Override
+    public double getBreedingProbability() {
+        return BREEDING_PROBABILITY;
+    }
+
+    @Override
+    public int getMaxLitterSize() {
+        return MAX_LITTER_SIZE;
+    }
 }

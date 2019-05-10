@@ -1,22 +1,44 @@
-package io.muzoo.ooc.ecosystems;
+package io.muzoo.ooc.ecosystems.creatures;
+
+import io.muzoo.ooc.ecosystems.location.Location;
+
+import java.util.Random;
 
 public abstract class Animal {
 
     // The animal's age.
-    protected int age;
+    int age;
     // Whether the animal is alive or not.
-    protected boolean alive;
+    boolean alive;
     // The animal's position
-    protected Location location;
+    Location location;
+
+    // A shared random number generator to control breeding.
+    static final Random rand = new Random();
 
     /**
-     * Check whether the fox is alive or not.
+     * Create an animal. An animal can be created as a new born (age zero
+     * and not hungry) or with random age.
      *
-     * @return True if the fox is still alive.
+     * @param randomAge If true, the animal will have random age and hunger level.
+     */
+    public Animal(boolean randomAge){
+        age = 0;
+        alive = true;
+        if (randomAge) {
+            age = rand.nextInt(getMaxAge());
+        }
+    }
+
+    /**
+     * Check whether the animal is alive or not.
+     *
+     * @return True if the animal is still alive.
      */
     public boolean isAlive() {
         return alive;
     }
+
 
     /**
      * Set the animal's location.
@@ -28,13 +50,56 @@ public abstract class Animal {
         this.location = new Location(row, col);
     }
 
+
     /**
-     * Set the fox's location.
+     * Set the animal's location.
      *
      * @param location The fox's location.
      */
     public void setLocation(Location location) {
         this.location = location;
     }
+
+
+    /**
+     * An animal can breed if it has reached the breeding age.
+     */
+    protected boolean canBreed() {
+        return age >= getBreedingAge();
+    }
+
+
+    /**
+     * Generate a number representing the number of births,
+     * if it can breed.
+     *
+     * @return The number of births (may be zero).
+     */
+    protected int breed() {
+        int births = 0;
+        if (canBreed() && rand.nextDouble() <= getBreedingProbability()) {
+            births = rand.nextInt(getMaxLitterSize()) + 1;
+        }
+        return births;
+    }
+
+    /**
+     * Increase the age.
+     * This could result in the animal's death.
+     */
+    protected void incrementAge() {
+        age++;
+        if (age > getMaxAge()) {
+            alive = false;
+        }
+    }
+
+    public abstract int getBreedingAge();
+
+    public abstract int getMaxAge();
+
+    public abstract double getBreedingProbability();
+
+    public abstract int getMaxLitterSize();
 
 }

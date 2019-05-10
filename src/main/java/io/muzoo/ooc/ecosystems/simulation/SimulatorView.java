@@ -1,7 +1,9 @@
-package io.muzoo.ooc.ecosystems;
+package io.muzoo.ooc.ecosystems.simulation;
+
+import io.muzoo.ooc.ecosystems.location.Field;
+import io.muzoo.ooc.ecosystems.location.FieldStats;
 
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 import java.util.HashMap;
 
