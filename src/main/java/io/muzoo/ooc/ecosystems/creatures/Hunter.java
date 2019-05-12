@@ -9,6 +9,9 @@ import java.util.List;
 
 public class Hunter extends Actor {
 
+    // the probability that a hunter just disappears (arrested maybe)
+    private static final double GONE_FACTOR = 0.005;
+
     public Hunter(){
         super();
         alive = true;
@@ -16,13 +19,22 @@ public class Hunter extends Actor {
 
     @Override
     public void act(Field currentField, Field updatedField, List<Animal> newAnimals) {
-        Location nextLocation = huntToNextLocation(currentField, updatedField);
-        if (nextLocation != null) {
-            setLocation(nextLocation);
-            updatedField.place(this, nextLocation);
-        } else {
-            setLocation(location);
-            updatedField.place(this, location);
+        checkStatus();
+        if(alive){
+            Location nextLocation = huntToNextLocation(currentField, updatedField);
+            if (nextLocation != null) {
+                setLocation(nextLocation);
+                updatedField.place(this, nextLocation);
+            } else {
+                setLocation(location);
+                updatedField.place(this, location);
+            }
+        }
+    }
+
+    private void checkStatus() {
+        if(rand.nextDouble() < GONE_FACTOR){
+            alive = false;
         }
     }
 

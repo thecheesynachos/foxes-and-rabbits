@@ -12,13 +12,13 @@ public class ActorFactory {
     private static final Random rand = new Random();
 
     // The probability that a rabbit will be created in any given grid position.
-    private static final double RABBIT_CREATION_PROBABILITY = 0.15;
+    private static final double RABBIT_CREATION_PROBABILITY = 0.2;
     // The probability that a fox will be created in any given grid position.
     private static final double FOX_CREATION_PROBABILITY = 0.1;
     // The probability that a tiger will be created in any given grid position.
     private static final double TIGER_CREATION_PROBABILITY = 0.05;
     // The probability that a hunter will be created in a grid position
-    private static final double HUNTER_CREATION_PROBABILITY = 0.01;
+    private static final double HUNTER_CREATION_PROBABILITY = 0.05;
 
     public Actor generateActor(boolean randomAge){
 
