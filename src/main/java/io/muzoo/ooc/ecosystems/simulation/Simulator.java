@@ -69,6 +69,7 @@ public class Simulator {
         updatedField.clear();
         newAnimals.clear();
         ArrayList<Actor> actorsNextRound = new ArrayList<>();
+        updatedField.transferGrassDataFrom(currentField);
 
         // let all actors act
         for (Actor actor : liveActors) {
@@ -81,7 +82,6 @@ public class Simulator {
         actorsNextRound.addAll(newAnimals);
         liveActors = actorsNextRound;
 
-        updatedField.transferGrassDataFrom(currentField);
         updatedField.growGrass();
         simulationFacade.setField(updatedField);
 

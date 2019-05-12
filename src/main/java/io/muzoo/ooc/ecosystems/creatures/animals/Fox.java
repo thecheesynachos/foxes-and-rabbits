@@ -18,11 +18,11 @@ public class Fox extends Animal {
     // The age to which a fox can live.
     private static final int MAX_AGE = 150;
     // The likelihood of a fox breeding.
-    private static final double BREEDING_PROBABILITY = 0.09;
+    private static final double BREEDING_PROBABILITY = 0.1;
     // The maximum number of births.
-    private static final int MAX_LITTER_SIZE = 3;
+    private static final int MAX_LITTER_SIZE = 2;
     // The food value of a single fox
-    static final int FOX_FOOD_VALUE = 15;
+    private static final int FOX_FOOD_VALUE = 10;
 
     // Individual characteristics (instance fields).
 
@@ -43,22 +43,12 @@ public class Fox extends Animal {
 
 
     @Override
-    protected Location nextLocation(Field currentField, Field updatedField) {
+    protected Location huntToNextLocation(Field currentField, Field updatedField) {
         Location newLocation = huntForPrey(currentField, location, Rabbit.class);
         if (newLocation == null) {  // no food found - move randomly
             newLocation = updatedField.freeAdjacentLocation(location);
         }
         return newLocation;
-    }
-
-    /**
-     * Make this fox more hungry. This could result in the fox's death.
-     */
-    protected void incrementHunger() {
-        foodLevel--;
-        if (foodLevel <= 0) {
-            alive = false;
-        }
     }
 
     @Override

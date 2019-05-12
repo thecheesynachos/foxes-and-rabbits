@@ -12,26 +12,12 @@ public class Tiger extends Animal {
     // The likelihood of a tiger breeding.
     private static final double BREEDING_PROBABILITY = 0.05;
     // The maximum number of births.
-    private static final int MAX_LITTER_SIZE = 3;
-    // The food value of a single fox. In effect, this is the
-    // number of steps a tiger can go before it has to eat again.
-    private static final int FOX_FOOD_VALUE = 10;
+    private static final int MAX_LITTER_SIZE = 1;
     // The food value of a single tiger
-    static final int TIGER_FOOD_VALUE = 30;
-    // The tiger's food level, which is increased by eating foxes.
-    private int foodLevel;
+    static final int TIGER_FOOD_VALUE = 20;
 
     public Tiger(boolean randomAge){
         super(randomAge);
-        foodLevel = FOX_FOOD_VALUE;
-    }
-
-    @Override
-    protected void incrementHunger() {
-        foodLevel--;
-        if (foodLevel <= 0) {
-            alive = false;
-        }
     }
 
     @Override
@@ -65,7 +51,7 @@ public class Tiger extends Animal {
     }
 
     @Override
-    protected Location nextLocation(Field currentField, Field updatedField) {
+    protected Location huntToNextLocation(Field currentField, Field updatedField) {
         Location newLocation = huntForPrey(currentField, location, Fox.class);
         if (newLocation == null) {  // no foxes - tries finding a rabbit
             newLocation = huntForPrey(currentField, location, Rabbit.class);

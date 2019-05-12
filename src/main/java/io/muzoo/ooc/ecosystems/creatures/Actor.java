@@ -59,6 +59,6 @@ public abstract class Actor {
      * Find the next location that the actor goes to
      * How this is chosen should depend on the type of actor (e.g. find food, random, run away)
      */
-    protected abstract Location nextLocation(Field currentField, Field updatedField);
+    protected abstract Location huntToNextLocation(Field currentField, Field updatedField);
 
 }

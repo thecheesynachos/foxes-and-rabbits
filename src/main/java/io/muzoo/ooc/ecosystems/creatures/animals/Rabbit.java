@@ -3,6 +3,8 @@ package io.muzoo.ooc.ecosystems.creatures.animals;
 import io.muzoo.ooc.ecosystems.simulation.Field;
 import io.muzoo.ooc.ecosystems.simulation.helpers.Location;
 
+import java.util.Iterator;
+
 /**
  * A simple model of a rabbit.
  * Rabbits age, move, breed, and die.
@@ -20,7 +22,7 @@ public class Rabbit extends Animal{
     // The likelihood of a rabbit breeding.
     private static final double BREEDING_PROBABILITY = 0.15;
     // The maximum number of births.
-    private static final int MAX_LITTER_SIZE = 5;
+    private static final int MAX_LITTER_SIZE = 4;
     // The food value of a single rabbit. In effect, this is the
     // number of steps a fox can go before it has to eat again.
     static final int RABBIT_FOOD_VALUE = 5;
@@ -37,12 +39,16 @@ public class Rabbit extends Animal{
 
 
     @Override
-    protected Location nextLocation(Field currentField, Field updatedField) {
-        return updatedField.freeAdjacentLocation(location);
+    protected Location huntToNextLocation(Field currentField, Field updatedField) {
+        for (Iterator<Location> it = currentField.adjacentLocations(location); it.hasNext(); ) {
+            Location nextLocation = it.next();
+            if (updatedField.hasGrass(nextLocation) && updatedField.isFree(nextLocation)){
+                updatedField.eatGrass(nextLocation);
+                return nextLocation;
+            }
+        }
+        return currentField.freeAdjacentLocation(location);
     }
-
-    @Override
-    protected void incrementHunger() { }
 
 
     @Override

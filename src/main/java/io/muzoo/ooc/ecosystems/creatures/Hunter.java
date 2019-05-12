@@ -16,7 +16,7 @@ public class Hunter extends Actor {
 
     @Override
     public void act(Field currentField, Field updatedField, List<Animal> newAnimals) {
-        Location nextLocation = nextLocation(currentField, updatedField);
+        Location nextLocation = huntToNextLocation(currentField, updatedField);
         if (nextLocation != null) {
             setLocation(nextLocation);
             updatedField.place(this, nextLocation);
@@ -27,7 +27,7 @@ public class Hunter extends Actor {
     }
 
     @Override
-    protected Location nextLocation(Field currentField, Field updatedField) {
+    protected Location huntToNextLocation(Field currentField, Field updatedField) {
         // Hunter just moves to a random spot
         Iterator<Location> adjacentLocations = currentField.adjacentLocations(location);
         Location where = adjacentLocations.next();

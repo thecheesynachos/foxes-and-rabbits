@@ -95,6 +95,13 @@ public class Field {
     }
 
     /**
+     * @return if spot is free
+     */
+    public boolean isFree(Location location){
+        return population[location.getRow()][location.getCol()] < POPULATION_DENSITY - 1;
+    }
+
+    /**
      * Return the first actor at the given location, if any.
      *
      * @param location Where in the field.
@@ -214,6 +221,10 @@ public class Field {
 
     public boolean eatGrass(Location location){
         return eatGrass(location.getRow(), location.getCol());
+    }
+
+    public boolean hasGrass(Location location){
+        return grass[location.getRow()][location.getCol()] > 0;
     }
 
     /**

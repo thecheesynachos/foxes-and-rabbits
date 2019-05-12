@@ -24,6 +24,7 @@ public abstract class Animal extends Actor {
         super();
         age = 0;
         alive = true;
+        foodLevel = getFoodValue();
         if (randomAge) {
             age = rand.nextInt(getMaxAge());
         }
@@ -54,7 +55,7 @@ public abstract class Animal extends Actor {
         incrementHunger();
         if(alive) {
             createOffspring(updatedField, newAnimals);
-            Location nextLocation = nextLocation(currentField, updatedField);
+            Location nextLocation = huntToNextLocation(currentField, updatedField);
             if (nextLocation != null) {
                 setLocation(nextLocation);
                 updatedField.place(this, nextLocation);
@@ -101,7 +102,12 @@ public abstract class Animal extends Actor {
         alive = false;
     }
 
-    protected abstract void incrementHunger();
+    protected void incrementHunger(){
+        foodLevel--;
+        if (foodLevel <= 0) {
+            alive = false;
+        }
+    }
 
     public abstract int getBreedingAge();
 
