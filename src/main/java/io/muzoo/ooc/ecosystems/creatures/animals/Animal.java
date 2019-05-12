@@ -69,10 +69,13 @@ public abstract class Animal extends Actor {
         int births = breed();
         for (int b = 0; b < births; b++) {
             Animal newAnimal = generateNewAnimal();
-            newAnimals.add(newAnimal);
             Location loc = updatedField.randomAdjacentLocation(location);
-            newAnimal.setLocation(loc);
-            updatedField.place(newAnimal, loc);
+            boolean success = updatedField.place(newAnimal, loc);
+            // only update the spot if there is still space (can add new population in)
+            if (success) {
+                newAnimals.add(newAnimal);
+                newAnimal.setLocation(loc);
+            }
         }
     }
 

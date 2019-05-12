@@ -21,7 +21,11 @@ public class Field {
     // The depth and width of the field.
     private int depth, width;
     // Storage for the animals.
-    private Actor[][] field;
+    private Actor[][][] field;
+    // Current population of a field
+    private int[][] population;
+
+    private static final int POPULATION_DENSITY = 2;
 
     /**
      * Represent a field of the given dimensions.
@@ -32,7 +36,8 @@ public class Field {
     public Field(int depth, int width) {
         this.depth = depth;
         this.width = width;
-        field = new Actor[depth][width];
+        field = new Actor[depth][width][POPULATION_DENSITY];
+        population = new int[depth][width];
     }
 
     /**
@@ -41,7 +46,10 @@ public class Field {
     public void clear() {
         for (int row = 0; row < depth; row++) {
             for (int col = 0; col < width; col++) {
-                field[row][col] = null;
+                population[row][col] = 0;
+                for (int spot = 0; spot < POPULATION_DENSITY; spot++){
+                    field[row][col][spot] = null;
+                }
             }
         }
     }
@@ -56,8 +64,8 @@ public class Field {
      * @param row    Row coordinate of the location.
      * @param col    Column coordinate of the location.
      */
-    public void place(Actor actor, int row, int col) {
-        place(actor, new Location(row, col));
+    public boolean place(Actor actor, int row, int col) {
+        return place(actor, new Location(row, col));
     }
 
     /**
@@ -68,12 +76,20 @@ public class Field {
      * @param actor   The actor to be placed.
      * @param location Where to place the animal.
      */
-    public void place(Actor actor, Location location) {
-        field[location.getRow()][location.getCol()] = actor;
+    public boolean place(Actor actor, Location location) {
+        int row = location.getRow();
+        int col = location.getCol();
+        // only add in population if there is still free space
+        if (population[row][col] < POPULATION_DENSITY - 1) {
+            field[row][col][population[row][col]] = actor;
+            population[row][col]++;
+            return true;
+        }
+        return false;
     }
 
     /**
-     * Return the actor at the given location, if any.
+     * Return the first actor at the given location, if any.
      *
      * @param location Where in the field.
      * @return The animal at the given location, or null if there is none.
@@ -84,14 +100,14 @@ public class Field {
 
 
     /**
-     * Return the animal at the given location, if any.
+     * Return the first actor at the given location, if any.
      *
      * @param row The desired row.
      * @param col The desired column.
      * @return The animal at the given location, or null if there is none.
      */
     public Actor getActorAt(int row, int col) {
-        return field[row][col];
+        return field[row][col][0];
     }
 
     /**
@@ -136,12 +152,12 @@ public class Field {
         Iterator adjacent = adjacentLocations(location);
         while (adjacent.hasNext()) {
             Location next = (Location) adjacent.next();
-            if (field[next.getRow()][next.getCol()] == null) {
+            if (population[next.getRow()][next.getCol()] < POPULATION_DENSITY) {
                 return next;
             }
         }
         // check whether current location is free
-        if (field[location.getRow()][location.getCol()] == null) {
+        if (population[location.getRow()][location.getCol()] < POPULATION_DENSITY) {
             return location;
         } else {
             return null;
@@ -189,4 +205,12 @@ public class Field {
     public int getWidth() {
         return width;
     }
+
+    /**
+     * @return Population at a certain spot
+     */
+    public int getPoulation(int row, int col){
+        return population[row][col];
+    }
+
 }
