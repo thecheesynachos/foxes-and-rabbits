@@ -81,6 +81,8 @@ public class Simulator {
         actorsNextRound.addAll(newAnimals);
         liveActors = actorsNextRound;
 
+        updatedField.transferGrassDataFrom(currentField);
+        updatedField.growGrass();
         simulationFacade.setField(updatedField);
 
     }

@@ -24,8 +24,12 @@ public class Field {
     private Actor[][][] field;
     // Current population of a field
     private int[][] population;
-
+    // Array to keep amount of grass in a field
+    private int[][] grass;
+    // How many Actor can share the same spot in field
     private static final int POPULATION_DENSITY = 2;
+    // Maximum amount of grass that can exist in a spot
+    private static final int MAX_GRASS_LIMIT = 10;
 
     /**
      * Represent a field of the given dimensions.
@@ -38,6 +42,7 @@ public class Field {
         this.width = width;
         field = new Actor[depth][width][POPULATION_DENSITY];
         population = new int[depth][width];
+        grass = new int[depth][width];
     }
 
     /**
@@ -47,6 +52,7 @@ public class Field {
         for (int row = 0; row < depth; row++) {
             for (int col = 0; col < width; col++) {
                 population[row][col] = 0;
+                grass[row][col] = MAX_GRASS_LIMIT;
                 for (int spot = 0; spot < POPULATION_DENSITY; spot++){
                     field[row][col][spot] = null;
                 }
@@ -191,6 +197,42 @@ public class Field {
         Collections.shuffle(locations, rand);
         return locations.iterator();
     }
+
+    /**
+     *  Eat grass at a location
+     *
+     * @return if grass eating is successful
+     */
+    public boolean eatGrass(int row, int col){
+        if (grass[row][col] > 0){
+            grass[row][col]--;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean eatGrass(Location location){
+        return eatGrass(location.getRow(), location.getCol());
+    }
+
+    /**
+     *  Grows grass (in one timestep)
+     */
+    public void growGrass(){
+        for (int row = 0; row < depth; row++){
+            for (int col = 0; col < width; col++){
+                if (grass[row][col] < MAX_GRASS_LIMIT){
+                    grass[row][col]++;
+                }
+            }
+        }
+    }
+
+    public void transferGrassDataFrom(Field field){
+        this.grass = field.grass;
+    }
+
 
     /**
      * @return The depth of the field.
