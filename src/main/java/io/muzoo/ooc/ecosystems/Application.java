@@ -1,11 +1,11 @@
 package io.muzoo.ooc.ecosystems;
 
-import io.muzoo.ooc.ecosystems.simulation.Simulator;
+import io.muzoo.ooc.ecosystems.simulation.SimulationFacade;
 
 public class Application {
     public static void main(String[] args) {
-        Simulator sim = new Simulator(100, 180);
-        sim.simulate(500);
+        SimulationFacade simFacade = new SimulationFacade(100, 180);
+        simFacade.simulate(500);
         System.exit(0);
     }
 

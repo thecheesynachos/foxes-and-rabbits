@@ -1,6 +1,7 @@
-package io.muzoo.ooc.ecosystems.location;
+package io.muzoo.ooc.ecosystems.simulation;
 
 import io.muzoo.ooc.ecosystems.creatures.Actor;
+import io.muzoo.ooc.ecosystems.simulation.helpers.Location;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -44,6 +45,7 @@ public class Field {
             }
         }
     }
+
 
     /**
      * Place an animal at the given location.

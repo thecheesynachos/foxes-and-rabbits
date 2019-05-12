@@ -1,4 +1,4 @@
-package io.muzoo.ooc.ecosystems.simulation;
+package io.muzoo.ooc.ecosystems.simulation.helpers;
 
 import java.awt.Color;
 

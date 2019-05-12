@@ -2,16 +2,10 @@ package io.muzoo.ooc.ecosystems.simulation;
 
 import io.muzoo.ooc.ecosystems.creatures.*;
 import io.muzoo.ooc.ecosystems.creatures.animals.Animal;
-import io.muzoo.ooc.ecosystems.creatures.animals.Fox;
-import io.muzoo.ooc.ecosystems.creatures.animals.Rabbit;
-import io.muzoo.ooc.ecosystems.creatures.animals.Tiger;
-import io.muzoo.ooc.ecosystems.location.Field;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Collections;
-import java.awt.Color;
 
 /**
  * A simple predator-prey simulator, based on a field containing
@@ -29,17 +23,11 @@ public class Simulator {
     private static final int DEFAULT_DEPTH = 50;
 
     // The list of actors in the field
-    private List<Actor> actors;
+    private List<Actor> liveActors;
     // The list of actors just born
     private List<Animal> newAnimals;
-    // The current state of the field.
-    private Field field;
     // A second field, used to build the next stage of the simulation.
     private Field updatedField;
-    // The current step of the simulation.
-    private int step;
-    // A graphical view of the simulation.
-    private SimulatorView view;
 
     /**
      * Construct a simulation field with default size.
@@ -61,78 +49,48 @@ public class Simulator {
             depth = DEFAULT_DEPTH;
             width = DEFAULT_WIDTH;
         }
-        actors = new ArrayList<>();
+        liveActors = new ArrayList<>();
         newAnimals = new ArrayList<>();
-        field = new Field(depth, width);
         updatedField = new Field(depth, width);
-
-        // Create a view of the state of each location in the field.
-        view = new SimulatorView(depth, width);
-        view.setColor(Fox.class, Color.blue);
-        view.setColor(Rabbit.class, Color.yellow);
-        view.setColor(Tiger.class, Color.red);
-        view.setColor(Hunter.class, Color.black);
 
         // Setup a valid starting point.
         reset();
     }
 
     /**
-     * Run the simulation from its current state for a reasonably long period,
-     * e.g. 500 steps.
-     */
-    public void runLongSimulation() {
-        simulate(500);
-    }
-
-    /**
-     * Run the simulation from its current state for the given number of steps.
-     * Stop before the given number of steps if it ceases to be viable.
-     */
-    public void simulate(int numSteps) {
-        for (int step = 1; step <= numSteps && view.isViable(field); step++) {
-            simulateOneStep();
-        }
-    }
-
-    /**
      * Run the simulation from its current state for a single step.
-     * Iterate over the whole field updating the state of each
-     * fox and rabbit.
+     * Iterate over the whole field updating the state of each actor.
+     * Update actors array to only keep live actors.
      */
-    public void simulateOneStep() {
-        step++;
+    void simulateOneStep(SimulationFacade simulationFacade) {
+
+        Field currentField = simulationFacade.getField();
+
+        updatedField.clear();
         newAnimals.clear();
+        ArrayList<Actor> actorsNextRound = new ArrayList<>();
 
         // let all actors act
-        for (Actor actor : actors) {
-            actor.act(field, updatedField, newAnimals);
+        for (Actor actor : liveActors) {
+            actor.act(currentField, updatedField, newAnimals);
+            if (actor.isAlive()){
+                actorsNextRound.add(actor);
+            }
         }
         // add new born actors to the list of actors
-        actors.addAll(newAnimals);
+        actorsNextRound.addAll(newAnimals);
+        liveActors = actorsNextRound;
 
-        // Swap the field and updatedField at the end of the step.
-        Field temp = field;
-        field = updatedField;
-        updatedField = temp;
-        updatedField.clear();
+        simulationFacade.setField(updatedField);
 
-        // display the new field on screen
-        view.showStatus(step, field);
     }
 
     /**
      * Reset the simulation to a starting position.
      */
     public void reset() {
-        step = 0;
-        actors.clear();
-        field.clear();
+        liveActors.clear();
         updatedField.clear();
-        populate(field);
-
-        // Show the starting state in the view.
-        view.showStatus(step, field);
     }
 
     /**
@@ -140,19 +98,24 @@ public class Simulator {
      *
      * @param field The field to be populated.
      */
-    private void populate(Field field) {
+    void populate(Field field) {
         ActorFactory actorFactory = new ActorFactory();
         field.clear();
         for (int row = 0; row < field.getDepth(); row++) {
             for (int col = 0; col < field.getWidth(); col++) {
                 Actor actor = actorFactory.generateActor(true);
                 if(actor != null) {
-                    actors.add(actor);
+                    liveActors.add(actor);
                     actor.setLocation(row, col);
                     field.place(actor, row, col);
                 } // else leave the location empty.
             }
         }
-        Collections.shuffle(actors);
+        Collections.shuffle(liveActors);
     }
+
+    public List<Actor> getCurrentLiveActors(){
+        return liveActors;
+    }
+
 }

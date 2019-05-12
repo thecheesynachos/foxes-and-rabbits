@@ -1,7 +1,7 @@
 package io.muzoo.ooc.ecosystems.creatures.animals;
 
-import io.muzoo.ooc.ecosystems.location.Field;
-import io.muzoo.ooc.ecosystems.location.Location;
+import io.muzoo.ooc.ecosystems.simulation.Field;
+import io.muzoo.ooc.ecosystems.simulation.helpers.Location;
 
 /**
  * A simple model of a rabbit.

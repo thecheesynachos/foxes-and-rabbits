@@ -1,8 +1,6 @@
 package io.muzoo.ooc.ecosystems.simulation;
 
 import io.muzoo.ooc.ecosystems.creatures.Actor;
-import io.muzoo.ooc.ecosystems.location.Field;
-import io.muzoo.ooc.ecosystems.location.FieldStats;
 
 import java.awt.*;
 import javax.swing.*;
@@ -31,16 +29,13 @@ public class SimulatorView extends JFrame {
     private FieldView fieldView;
 
     // A map for storing colors for participants in the simulation
-    private HashMap colors;
-    // A statistics object computing and storing simulation information
-    private FieldStats stats;
+    private HashMap<Class, Color> colors;
 
     /**
      * Create a view of the given width and height.
      */
     public SimulatorView(int height, int width) {
-        stats = new FieldStats();
-        colors = new HashMap();
+        colors = new HashMap<>();
 
         setTitle("Fox and Rabbit Simulation");
         stepLabel = new JLabel(STEP_PREFIX, JLabel.CENTER);
@@ -72,7 +67,7 @@ public class SimulatorView extends JFrame {
      * @return The color to be used for a given class of animal.
      */
     private Color getColor(Class animalClass) {
-        Color col = (Color) colors.get(animalClass);
+        Color col = colors.get(animalClass);
         if (col == null) {
             // no color defined for this class
             return UNKNOWN_COLOR;
@@ -84,15 +79,18 @@ public class SimulatorView extends JFrame {
     /**
      * Show the current status of the field.
      *
-     * @param step  Which iteration step it is.
-     * @param field The field whose status is to be displayed.
+     * @param step             Which iteration step it is.
+     * @param simulationFacade Simulation facade to draw.
      */
-    public void showStatus(int step, Field field) {
+    public void showStatus(int step, SimulationFacade simulationFacade) {
+
+        Field field = simulationFacade.getField();
+        FieldStats stats = simulationFacade.getFieldStats();
+
         if (!isVisible())
             setVisible(true);
 
         stepLabel.setText(STEP_PREFIX + step);
-        stats.reset();
 
         fieldView.preparePaint();
 
@@ -100,27 +98,18 @@ public class SimulatorView extends JFrame {
             for (int col = 0; col < field.getWidth(); col++) {
                 Actor animal = field.getActorAt(row, col);
                 if (animal != null) {
-                    stats.incrementCount(animal.getClass());
                     fieldView.drawMark(col, row, getColor(animal.getClass()));
                 } else {
                     fieldView.drawMark(col, row, EMPTY_COLOR);
                 }
             }
         }
-        stats.countFinished();
 
         population.setText(POPULATION_PREFIX + stats.getPopulationDetails(field));
         fieldView.repaint();
+
     }
 
-    /**
-     * Determine whether the simulation should continue to run.
-     *
-     * @return true If there is more than one species alive.
-     */
-    public boolean isViable(Field field) {
-        return stats.isViable(field);
-    }
 
     /**
      * Provide a graphical view of a rectangular field. This is
