@@ -12,22 +12,34 @@ public class ActorFactory {
     private static final Random rand = new Random();
 
     // The probability that a rabbit will be created in any given grid position.
-    private static final double RABBIT_CREATION_PROBABILITY = 0.2;
+    private static final double RABBIT_CREATION_PROBABILITY = 0.15;
     // The probability that a fox will be created in any given grid position.
     private static final double FOX_CREATION_PROBABILITY = 0.1;
     // The probability that a tiger will be created in any given grid position.
-    private static final double TIGER_CREATION_PROBABILITY = 0.08;
+    private static final double TIGER_CREATION_PROBABILITY = 0.05;
     // The probability that a hunter will be created in a grid position
-    private static final double HUNTER_CREATION_PROBABILITY = 0.02;
+    private static final double HUNTER_CREATION_PROBABILITY = 0.01;
 
     public Actor generateActor(boolean randomAge){
-        if (rand.nextDouble() <= FOX_CREATION_PROBABILITY) {
+
+        double randomNumber = rand.nextDouble();
+
+        if (randomNumber <= FOX_CREATION_PROBABILITY) {
             return new Fox(randomAge);
-        } else if (rand.nextDouble() <= RABBIT_CREATION_PROBABILITY) {
+        }
+        randomNumber -= FOX_CREATION_PROBABILITY;
+
+        if (randomNumber <= RABBIT_CREATION_PROBABILITY) {
             return new Rabbit(randomAge);
-        } else if (rand.nextDouble() <= TIGER_CREATION_PROBABILITY) {
+        }
+        randomNumber -= RABBIT_CREATION_PROBABILITY;
+
+        if (randomNumber <= TIGER_CREATION_PROBABILITY) {
             return new Tiger(randomAge);
-        } else if (rand.nextDouble() <= HUNTER_CREATION_PROBABILITY) {
+        }
+        randomNumber -= TIGER_CREATION_PROBABILITY;
+
+        if (randomNumber <= HUNTER_CREATION_PROBABILITY) {
             return new Hunter();
         } else return null;
     }

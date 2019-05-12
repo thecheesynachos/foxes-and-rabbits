@@ -44,6 +44,7 @@ public class Rabbit extends Animal{
             Location nextLocation = it.next();
             if (updatedField.hasGrass(nextLocation) && updatedField.isFree(nextLocation)){
                 updatedField.eatGrass(nextLocation);
+                foodLevel++;
                 return nextLocation;
             }
         }

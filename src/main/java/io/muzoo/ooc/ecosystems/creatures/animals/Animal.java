@@ -135,7 +135,7 @@ public abstract class Animal extends Actor {
                 Animal prey = (Animal) actor;
                 if (prey.isAlive()) {
                     prey.setDead();
-                    foodLevel = prey.getFoodValue();
+                    foodLevel += prey.getFoodValue();
                     return where;
                 }
             }
