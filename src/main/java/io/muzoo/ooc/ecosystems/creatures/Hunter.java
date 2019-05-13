@@ -10,7 +10,7 @@ import java.util.List;
 public class Hunter extends Actor {
 
     // the probability that a hunter just disappears (arrested maybe)
-    private static final double GONE_FACTOR = 0.005;
+    private static final double GONE_FACTOR = 0.001;
 
     public Hunter(){
         super();

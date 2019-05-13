@@ -69,14 +69,6 @@ public class SimulationFacade {
 		return fieldStats;
 	}
 
-	public Simulator getSimulator() {
-		return simulator;
-	}
-
-	public SimulatorView getSimulatorView() {
-		return simulatorView;
-	}
-
 	public void setField(Field field) {
 		this.field = field;
 	}

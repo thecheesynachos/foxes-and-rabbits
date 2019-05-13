@@ -54,7 +54,7 @@ public abstract class Animal extends Actor {
         incrementAge();
         incrementHunger();
         if(alive) {
-            createOffspring(updatedField, newAnimals);
+            createOffspring(currentField, updatedField, newAnimals);
             Location nextLocation = huntToNextLocation(currentField, updatedField);
             if (nextLocation != null) {
                 setLocation(nextLocation);
@@ -66,16 +66,23 @@ public abstract class Animal extends Actor {
         }
     }
 
-    private void createOffspring(Field updatedField, List<Animal> newAnimals){
-        int births = breed();
-        for (int b = 0; b < births; b++) {
-            Animal newAnimal = generateNewAnimal();
-            Location loc = updatedField.randomAdjacentLocation(location);
-            boolean success = updatedField.place(newAnimal, loc);
-            // only update the spot if there is still space (can add new population in)
-            if (success) {
-                newAnimals.add(newAnimal);
-                newAnimal.setLocation(loc);
+    private void createOffspring(Field currentField, Field updatedField, List<Animal> newAnimals){
+        Actor[] actorsAround = currentField.getActorsAt(this.location);
+        for(Actor actor : actorsAround) {
+            // only breed if two animals of same species in a space
+            if ((actor != null) && (this.getClass() == actor.getClass()) && !(this == actor)) {
+                int births = breed();
+                for (int b = 0; b < births; b++) {
+                    Animal newAnimal = generateNewAnimal();
+                    Location loc = updatedField.randomAdjacentLocation(location);
+                    boolean success = updatedField.place(newAnimal, loc);
+                    // only update the spot if there is still space (can add new population in)
+                    if (success) {
+                        newAnimals.add(newAnimal);
+                        newAnimal.setLocation(loc);
+                    }
+                }
+                break;
             }
         }
     }

@@ -27,7 +27,7 @@ public class Field {
     // Array to keep amount of grass in a field
     private int[][] grass;
     // How many Actor can share the same spot in field
-    private static final int POPULATION_DENSITY = 2;
+    private static final int POPULATION_DENSITY = 3;
     // Maximum amount of grass that can exist in a spot
     private static final int MAX_GRASS_LIMIT = 10;
 
@@ -121,6 +121,16 @@ public class Field {
      */
     public Actor getActorAt(int row, int col) {
         return field[row][col][0];
+    }
+
+    /**
+     * Return the actors at the given location, if any.
+     *
+     * @param location Where in the field.
+     * @return The actors at the given location, or null if there is none.
+     */
+    public Actor[] getActorsAt(Location location) {
+        return field[location.getRow()][location.getCol()];
     }
 
     /**
@@ -266,4 +276,7 @@ public class Field {
         return population[row][col];
     }
 
+	public static int getPopulationDensity() {
+		return POPULATION_DENSITY;
+	}
 }

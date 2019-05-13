@@ -105,12 +105,14 @@ public class Simulator {
         field.clear();
         for (int row = 0; row < field.getDepth(); row++) {
             for (int col = 0; col < field.getWidth(); col++) {
-                Actor actor = actorFactory.generateActor(true);
-                if(actor != null) {
-                    liveActors.add(actor);
-                    actor.setLocation(row, col);
-                    field.place(actor, row, col);
-                } // else leave the location empty.
+                for (int pos = 0; pos < Field.getPopulationDensity(); pos++) {
+                    Actor actor = actorFactory.generateActor(true);
+                    if (actor != null) {
+                        liveActors.add(actor);
+                        actor.setLocation(row, col);
+                        field.place(actor, row, col);
+                    } // else leave the location empty.
+                }
             }
         }
         Collections.shuffle(liveActors);
