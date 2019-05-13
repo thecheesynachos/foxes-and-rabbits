@@ -1,6 +1,7 @@
 package io.muzoo.ooc.ecosystems.simulation;
 
 import io.muzoo.ooc.ecosystems.creatures.Actor;
+import io.muzoo.ooc.ecosystems.simulation.helpers.Grass;
 import io.muzoo.ooc.ecosystems.simulation.helpers.Location;
 
 import java.util.Collections;
@@ -25,11 +26,9 @@ public class Field {
     // Current population of a field
     private int[][] population;
     // Array to keep amount of grass in a field
-    private int[][] grass;
+    private Grass[][] grass;
     // How many Actor can share the same spot in field
     private static final int POPULATION_DENSITY = 3;
-    // Maximum amount of grass that can exist in a spot
-    private static final int MAX_GRASS_LIMIT = 10;
 
     /**
      * Represent a field of the given dimensions.
@@ -42,7 +41,7 @@ public class Field {
         this.width = width;
         field = new Actor[depth][width][POPULATION_DENSITY];
         population = new int[depth][width];
-        grass = new int[depth][width];
+        grass = new Grass[depth][width];
     }
 
     /**
@@ -52,7 +51,7 @@ public class Field {
         for (int row = 0; row < depth; row++) {
             for (int col = 0; col < width; col++) {
                 population[row][col] = 0;
-                grass[row][col] = MAX_GRASS_LIMIT;
+                grass[row][col] = new Grass();
                 for (int spot = 0; spot < POPULATION_DENSITY; spot++){
                     field[row][col][spot] = null;
                 }
@@ -221,20 +220,16 @@ public class Field {
      * @return if grass eating is successful
      */
     public boolean eatGrass(int row, int col){
-        if (grass[row][col] > 0){
-            grass[row][col]--;
-            return true;
-        } else {
-            return false;
-        }
+		boolean success = grass[row][col].eatGrass();
+		return success;
     }
 
-    public boolean eatGrass(Location location){
-        return eatGrass(location.getRow(), location.getCol());
-    }
+	public boolean eatGrass(Location location){
+		return eatGrass(location.getRow(), location.getCol());
+	}
 
     public boolean hasGrass(Location location){
-        return grass[location.getRow()][location.getCol()] > 0;
+        return grass[location.getRow()][location.getCol()].hasGrass();
     }
 
     /**
@@ -243,9 +238,7 @@ public class Field {
     public void growGrass(){
         for (int row = 0; row < depth; row++){
             for (int col = 0; col < width; col++){
-                if (grass[row][col] < MAX_GRASS_LIMIT){
-                    grass[row][col]++;
-                }
+				grass[row][col].growGrass();
             }
         }
     }
