@@ -1,6 +1,12 @@
 package io.muzoo.ooc.ecosystems.simulation;
 
 import io.muzoo.ooc.ecosystems.creatures.Actor;
+import io.muzoo.ooc.ecosystems.creatures.Hunter;
+import io.muzoo.ooc.ecosystems.creatures.animals.Fox;
+import io.muzoo.ooc.ecosystems.creatures.animals.Rabbit;
+import io.muzoo.ooc.ecosystems.creatures.animals.Tiger;
+import io.muzoo.ooc.ecosystems.observer.Observer;
+import io.muzoo.ooc.ecosystems.observer.Subject;
 
 import java.awt.*;
 import javax.swing.*;
@@ -16,7 +22,7 @@ import java.util.HashMap;
  * @author David J. Barnes and Michael Kolling
  * @version 2003.12.22
  */
-public class SimulatorView extends JFrame {
+public class SimulatorView extends JFrame implements Observer {
     // Colors used for empty locations.
     private static final Color EMPTY_COLOR = Color.white;
 
@@ -31,6 +37,9 @@ public class SimulatorView extends JFrame {
     // A map for storing colors for participants in the simulation
     private HashMap<Class, Color> colors;
 
+    // Observed object
+    private Subject subject;
+
     /**
      * Create a view of the given width and height.
      */
@@ -44,6 +53,11 @@ public class SimulatorView extends JFrame {
         setLocation(100, 50);
 
         fieldView = new FieldView(height, width);
+
+        setColor(Fox.class, Color.blue);
+        setColor(Rabbit.class, Color.yellow);
+        setColor(Tiger.class, Color.red);
+        setColor(Hunter.class, Color.black);
 
         Container contents = getContentPane();
         contents.add(stepLabel, BorderLayout.NORTH);
@@ -108,6 +122,23 @@ public class SimulatorView extends JFrame {
         population.setText(POPULATION_PREFIX + stats.getPopulationDetails(field));
         fieldView.repaint();
 
+    }
+
+    @Override
+    public void update() {
+        SimulationFacade sf = (SimulationFacade) subject;
+        int step = sf.getStep();
+        showStatus(step, sf);
+    }
+
+    @Override
+    public void attachTo(Subject subject) {
+        this.subject = subject;
+    }
+
+    @Override
+    public Subject getAttachedSubject() {
+        return subject;
     }
 
 

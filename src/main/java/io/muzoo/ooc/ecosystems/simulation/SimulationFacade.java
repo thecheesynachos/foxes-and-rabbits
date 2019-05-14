@@ -1,65 +1,58 @@
 package io.muzoo.ooc.ecosystems.simulation;
 
 import io.muzoo.ooc.ecosystems.creatures.Actor;
-import io.muzoo.ooc.ecosystems.creatures.Hunter;
-import io.muzoo.ooc.ecosystems.creatures.animals.Fox;
-import io.muzoo.ooc.ecosystems.creatures.animals.Rabbit;
-import io.muzoo.ooc.ecosystems.creatures.animals.Tiger;
+import io.muzoo.ooc.ecosystems.observer.Observer;
+import io.muzoo.ooc.ecosystems.observer.Subject;
 
-import java.awt.Color;
+import java.util.ArrayList;
 import java.util.List;
 
-public class SimulationFacade {
+public class SimulationFacade implements Subject {
 
 	private Simulator simulator;
-	private SimulatorView simulatorView;
 	private Field field;
 	private FieldStats fieldStats;
+	private List<Observer> observers;
+	private int step;
 
 	public SimulationFacade(int depth, int width){
-
 		simulator = new Simulator(depth, width);
-
 		field = new Field(depth, width);
-
 		fieldStats = new FieldStats();
-
-		simulatorView = new SimulatorView(depth, width);
-		simulatorView.setColor(Fox.class, Color.blue);
-		simulatorView.setColor(Rabbit.class, Color.yellow);
-		simulatorView.setColor(Tiger.class, Color.red);
-		simulatorView.setColor(Hunter.class, Color.black);
-
+		observers = new ArrayList<>();
 		reset();
-
 	}
 
 	public void reset(){
 		simulator.reset();
 		field.clear();
 		simulator.populate(field);
+		this.step = 0;
 		// Show the starting state in the view.
-		simulatorView.showStatus(0, this);
+		notifyObservers();
 	}
 
 	public void simulate(int numSteps){
 		for(int i = 1; i <= numSteps; i++){
-			simulateOneStep(i);
+			simulateOneStep();
 		}
 	}
 
-	private void simulateOneStep(int step){
+	private void simulateOneStep(){
 
 		simulator.simulateOneStep(this);
 
 		List<Actor> liveActors = simulator.getCurrentLiveActors();
 		fieldStats.generateCounts(liveActors);
 		fieldStats.countFinished();
+		step++;
 
 		// display the new field on screen
-		simulatorView.showStatus(step, this);
+		notifyObservers();
 
 	}
+
+
 
 	public Field getField() {
 		return field;
@@ -71,5 +64,27 @@ public class SimulationFacade {
 
 	public void setField(Field field) {
 		this.field = field;
+	}
+
+	public int getStep() {
+		return step;
+	}
+
+	@Override
+	public List<Observer> getObservers() {
+		return observers;
+	}
+
+	@Override
+	public void notifyObservers() {
+		for(Observer observer : observers){
+			observer.update();
+		}
+	}
+
+	@Override
+	public void attachObserver(Observer observer) {
+		observers.add(observer);
+		observer.attachTo(this);
 	}
 }
