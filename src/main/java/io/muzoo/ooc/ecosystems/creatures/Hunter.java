@@ -3,6 +3,7 @@ package io.muzoo.ooc.ecosystems.creatures;
 import io.muzoo.ooc.ecosystems.creatures.animals.Animal;
 import io.muzoo.ooc.ecosystems.simulation.Field;
 import io.muzoo.ooc.ecosystems.simulation.helpers.Location;
+import io.muzoo.ooc.ecosystems.simulation.helpers.Randomer;
 
 import java.util.Iterator;
 import java.util.List;
@@ -33,7 +34,7 @@ public class Hunter extends Actor {
     }
 
     private void checkStatus() {
-        if(rand.nextDouble() < GONE_FACTOR){
+        if(Randomer.randomBooleanWithProb(GONE_FACTOR)){
             alive = false;
         }
     }

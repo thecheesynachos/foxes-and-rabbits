@@ -3,9 +3,11 @@ package io.muzoo.ooc.ecosystems.creatures.animals;
 import io.muzoo.ooc.ecosystems.creatures.Actor;
 import io.muzoo.ooc.ecosystems.simulation.Field;
 import io.muzoo.ooc.ecosystems.simulation.helpers.Location;
+import io.muzoo.ooc.ecosystems.simulation.helpers.Randomer;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 public abstract class Animal extends Actor {
 
@@ -24,9 +26,9 @@ public abstract class Animal extends Actor {
         super();
         age = 0;
         alive = true;
-        foodLevel = getFoodValue();
+        foodLevel = Randomer.randomInt(getFoodValue());
         if (randomAge) {
-            age = rand.nextInt(getMaxAge());
+            age = Randomer.randomInt(getMaxAge());
         }
     }
 
@@ -67,10 +69,10 @@ public abstract class Animal extends Actor {
     }
 
     private void createOffspring(Field currentField, Field updatedField, List<Animal> newAnimals){
-        Actor[] actorsAround = currentField.getActorsAt(this.location);
+        List<Actor> actorsAround = currentField.getActorsAround(this.location);
         for(Actor actor : actorsAround) {
             // only breed if two animals of same species in a space
-            if ((actor != null) && (this.getClass() == actor.getClass()) && !(this == actor)) {
+            if ((this.getClass() == actor.getClass()) && !(this == actor)) {
                 int births = breed();
                 for (int b = 0; b < births; b++) {
                     Animal newAnimal = generateNewAnimal();
@@ -96,8 +98,8 @@ public abstract class Animal extends Actor {
      */
     private int breed() {
         int births = 0;
-        if (canBreed() && rand.nextDouble() <= getBreedingProbability()) {
-            births = rand.nextInt(getMaxLitterSize()) + 1;
+        if (canBreed() && Randomer.randomBooleanWithProb(getBreedingProbability())) {
+            births = Randomer.randomInt(getMaxLitterSize()) + 1;
         }
         return births;
     }

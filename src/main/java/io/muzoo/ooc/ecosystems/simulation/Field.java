@@ -3,11 +3,9 @@ package io.muzoo.ooc.ecosystems.simulation;
 import io.muzoo.ooc.ecosystems.creatures.Actor;
 import io.muzoo.ooc.ecosystems.simulation.helpers.Grass;
 import io.muzoo.ooc.ecosystems.simulation.helpers.Location;
+import io.muzoo.ooc.ecosystems.simulation.helpers.Randomer;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Represent a rectangular grid of field positions.
@@ -17,7 +15,6 @@ import java.util.Random;
  * @version 2002.04.09
  */
 public class Field {
-    private static final Random rand = new Random();
 
     // The depth and width of the field.
     private int depth, width;
@@ -133,6 +130,23 @@ public class Field {
     }
 
     /**
+     * Get actors around a certain spot
+     */
+    public List<Actor> getActorsAround(Location location){
+        List<Actor> actorsAround = new ArrayList<>();
+        Iterator<Location> adjLocations = adjacentLocations(location);
+        for(Location adjLocation; adjLocations.hasNext();){
+            adjLocation = adjLocations.next();
+            for (Actor actor : getActorsAt(adjLocation)){
+                if (actor != null){
+                    actorsAround.add(actor);
+                }
+            }
+        }
+        return actorsAround;
+    }
+
+    /**
      * Generate a random location that is adjacent to the
      * given location, or is the same location.
      * The returned location will be within the valid bounds
@@ -146,8 +160,8 @@ public class Field {
         int row = location.getRow();
         int col = location.getCol();
         // Generate an offset of -1, 0, or +1 for both the current row and col.
-        int nextRow = row + rand.nextInt(3) - 1;
-        int nextCol = col + rand.nextInt(3) - 1;
+        int nextRow = row + Randomer.randomInt(3) - 1;
+        int nextCol = col + Randomer.randomInt(3) - 1;
         // Check in case the new location is outside the bounds.
         if (nextRow < 0 || nextRow >= depth || nextCol < 0 || nextCol >= width) {
             return location;
@@ -210,7 +224,7 @@ public class Field {
                 }
             }
         }
-        Collections.shuffle(locations, rand);
+        Collections.shuffle(locations, Randomer.getRandomInstance());
         return locations.iterator();
     }
 

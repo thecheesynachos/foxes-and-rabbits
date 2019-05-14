@@ -2,6 +2,7 @@ package io.muzoo.ooc.ecosystems.creatures.animals;
 
 import io.muzoo.ooc.ecosystems.simulation.Field;
 import io.muzoo.ooc.ecosystems.simulation.helpers.Location;
+import io.muzoo.ooc.ecosystems.simulation.helpers.Randomer;
 
 /**
  * A simple model of a fox.
@@ -34,11 +35,6 @@ public class Fox extends Animal {
      */
     public Fox(boolean randomAge) {
         super(randomAge);
-        if (randomAge) {
-            foodLevel = rand.nextInt(Rabbit.RABBIT_FOOD_VALUE);
-        } else {
-            foodLevel = Rabbit.RABBIT_FOOD_VALUE;
-        }
     }
 
 

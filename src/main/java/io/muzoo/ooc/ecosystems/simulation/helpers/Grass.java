@@ -10,8 +10,6 @@ public class Grass {
 	private static final int MAX_GRASS_LIMIT = 5;
 	// Grass growing probability
 	private static final double GRASS_GROWING_PROB = 0.5;
-	// random number generator
-	private Random rand = new Random();
 
 	public Grass(){
 		grassAmount = MAX_GRASS_LIMIT;
@@ -35,7 +33,7 @@ public class Grass {
 	}
 
 	public void growGrass(){
-		if (grassAmount < MAX_GRASS_LIMIT && rand.nextDouble() < GRASS_GROWING_PROB){
+		if (grassAmount < MAX_GRASS_LIMIT && Randomer.randomBooleanWithProb(GRASS_GROWING_PROB)){
 			grassAmount++;
 		}
 	}

@@ -14,9 +14,6 @@ public abstract class Actor {
     // Whether the actor is alive or not.
     protected boolean alive;
 
-    // A shared random number generator to control breeding.
-    protected static final Random rand = new Random();
-
     /**
      * Set the animal's location.
      *

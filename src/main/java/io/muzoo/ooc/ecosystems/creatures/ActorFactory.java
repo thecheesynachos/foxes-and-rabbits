@@ -1,28 +1,24 @@
 package io.muzoo.ooc.ecosystems.creatures;
 
-import io.muzoo.ooc.ecosystems.creatures.animals.Animal;
 import io.muzoo.ooc.ecosystems.creatures.animals.Fox;
 import io.muzoo.ooc.ecosystems.creatures.animals.Rabbit;
 import io.muzoo.ooc.ecosystems.creatures.animals.Tiger;
-
-import java.util.Random;
+import io.muzoo.ooc.ecosystems.simulation.helpers.Randomer;
 
 public class ActorFactory {
-
-    private static final Random rand = new Random();
 
     // The probability that a rabbit will be created in any given grid position.
     private static final double RABBIT_CREATION_PROBABILITY = 0.3;
     // The probability that a fox will be created in any given grid position.
     private static final double FOX_CREATION_PROBABILITY = 0.2;
     // The probability that a tiger will be created in any given grid position.
-    private static final double TIGER_CREATION_PROBABILITY = 0.1;
+    private static final double TIGER_CREATION_PROBABILITY = 0.15;
     // The probability that a hunter will be created in a grid position
-    private static final double HUNTER_CREATION_PROBABILITY = 0.03;
+    private static final double HUNTER_CREATION_PROBABILITY = 0.01;
 
     public Actor generateActor(boolean randomAge){
 
-        double randomNumber = rand.nextDouble();
+        double randomNumber = Randomer.randomDouble();
 
         if (randomNumber <= FOX_CREATION_PROBABILITY) {
             return new Fox(randomAge);
