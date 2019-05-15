@@ -5,7 +5,6 @@ import io.muzoo.ooc.ecosystems.simulation.Field;
 import io.muzoo.ooc.ecosystems.simulation.helpers.Location;
 
 import java.util.List;
-import java.util.Random;
 
 public abstract class Actor {
 

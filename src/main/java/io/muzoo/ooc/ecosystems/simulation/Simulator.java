@@ -106,7 +106,7 @@ public class Simulator {
         for (int row = 0; row < field.getDepth(); row++) {
             for (int col = 0; col < field.getWidth(); col++) {
                 for (int pos = 0; pos < Field.getPopulationDensity(); pos++) {
-                    Actor actor = actorFactory.generateActor(true);
+                    Actor actor = actorFactory.generateActor();
                     if (actor != null) {
                         liveActors.add(actor);
                         actor.setLocation(row, col);

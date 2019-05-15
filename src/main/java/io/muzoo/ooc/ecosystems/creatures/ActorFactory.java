@@ -5,6 +5,10 @@ import io.muzoo.ooc.ecosystems.creatures.animals.Rabbit;
 import io.muzoo.ooc.ecosystems.creatures.animals.Tiger;
 import io.muzoo.ooc.ecosystems.simulation.helpers.Randomer;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class ActorFactory {
 
     // The probability that a rabbit will be created in any given grid position.
@@ -16,28 +20,33 @@ public class ActorFactory {
     // The probability that a hunter will be created in a grid position
     private static final double HUNTER_CREATION_PROBABILITY = 0.01;
 
-    public Actor generateActor(boolean randomAge){
+    private static final double[] ACTOR_CREATION_PROBABILITIES = new double[]{
+            RABBIT_CREATION_PROBABILITY,
+            FOX_CREATION_PROBABILITY,
+            TIGER_CREATION_PROBABILITY,
+            HUNTER_CREATION_PROBABILITY
+    };
+
+    private static final List<Class<? extends Actor>> CLASSES = new ArrayList<>(
+            Arrays.asList(Rabbit.class, Fox.class, Tiger.class, Hunter.class)
+    );
+
+    public Actor generateActor(){
 
         double randomNumber = Randomer.randomDouble();
 
-        if (randomNumber <= FOX_CREATION_PROBABILITY) {
-            return new Fox(randomAge);
+        for (int i = 0 ; i < ACTOR_CREATION_PROBABILITIES.length; i++){
+            randomNumber -= ACTOR_CREATION_PROBABILITIES[i];
+            if (randomNumber < 0){
+                try {
+                    return CLASSES.get(i).getConstructor().newInstance();
+                } catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
         }
-        randomNumber -= FOX_CREATION_PROBABILITY;
 
-        if (randomNumber <= RABBIT_CREATION_PROBABILITY) {
-            return new Rabbit(randomAge);
-        }
-        randomNumber -= RABBIT_CREATION_PROBABILITY;
-
-        if (randomNumber <= TIGER_CREATION_PROBABILITY) {
-            return new Tiger(randomAge);
-        }
-        randomNumber -= TIGER_CREATION_PROBABILITY;
-
-        if (randomNumber <= HUNTER_CREATION_PROBABILITY) {
-            return new Hunter();
-        } else return null;
+        return null;
     }
 
 }

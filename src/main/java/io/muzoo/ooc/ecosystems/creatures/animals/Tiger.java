@@ -20,6 +20,10 @@ public class Tiger extends Animal {
         super(randomAge);
     }
 
+    public Tiger(){
+        super(false);
+    }
+
     @Override
     public int getBreedingAge() {
         return BREEDING_AGE;

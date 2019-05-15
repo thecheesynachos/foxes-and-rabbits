@@ -1,7 +1,7 @@
 package io.muzoo.ooc.ecosystems;
 
 import io.muzoo.ooc.ecosystems.simulation.SimulationFacade;
-import io.muzoo.ooc.ecosystems.simulation.SimulatorView;
+import io.muzoo.ooc.ecosystems.observer.SimulatorView;
 
 public class Application {
 

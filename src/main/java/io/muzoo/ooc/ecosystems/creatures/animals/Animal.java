@@ -32,7 +32,6 @@ public abstract class Animal extends Actor {
         }
     }
 
-
     /**
      * An animal can breed if it has reached the breeding age.
      */

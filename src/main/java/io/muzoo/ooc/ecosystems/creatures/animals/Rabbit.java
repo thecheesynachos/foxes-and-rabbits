@@ -37,6 +37,10 @@ public class Rabbit extends Animal{
         super(randomAge);
     }
 
+    public Rabbit(){
+        super(false);
+    }
+
 
     @Override
     protected Location huntToNextLocation(Field currentField, Field updatedField) {

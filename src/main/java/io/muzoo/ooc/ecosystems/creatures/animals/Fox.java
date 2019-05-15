@@ -37,6 +37,10 @@ public class Fox extends Animal {
         super(randomAge);
     }
 
+    public Fox(){
+        super(false);
+    }
+
 
     @Override
     protected Location huntToNextLocation(Field currentField, Field updatedField) {

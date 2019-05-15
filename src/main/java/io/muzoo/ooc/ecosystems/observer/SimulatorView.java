@@ -1,12 +1,13 @@
-package io.muzoo.ooc.ecosystems.simulation;
+package io.muzoo.ooc.ecosystems.observer;
 
 import io.muzoo.ooc.ecosystems.creatures.Actor;
 import io.muzoo.ooc.ecosystems.creatures.Hunter;
 import io.muzoo.ooc.ecosystems.creatures.animals.Fox;
 import io.muzoo.ooc.ecosystems.creatures.animals.Rabbit;
 import io.muzoo.ooc.ecosystems.creatures.animals.Tiger;
-import io.muzoo.ooc.ecosystems.observer.Observer;
-import io.muzoo.ooc.ecosystems.observer.Subject;
+import io.muzoo.ooc.ecosystems.simulation.Field;
+import io.muzoo.ooc.ecosystems.simulation.FieldStats;
+import io.muzoo.ooc.ecosystems.simulation.SimulationFacade;
 
 import java.awt.*;
 import javax.swing.*;
