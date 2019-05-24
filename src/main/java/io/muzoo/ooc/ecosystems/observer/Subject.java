@@ -1,13 +1,9 @@
 package io.muzoo.ooc.ecosystems.observer;
 
-import java.util.List;
-
 public interface Subject {
 
-	List<Observer> getObservers();
+	void notifyObserver();
 
-	void notifyObservers();
-
-	void attachObserver(Observer observer);
+	void getAttachedBy(Observer observer);
 
 }

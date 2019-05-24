@@ -3,18 +3,22 @@ package io.muzoo.ooc.ecosystems.creatures.animals;
 import io.muzoo.ooc.ecosystems.simulation.Field;
 import io.muzoo.ooc.ecosystems.simulation.helpers.Location;
 
+import java.awt.*;
+
 public class Tiger extends Animal {
 
     // The age at which a tiger can start to breed.
     private static final int BREEDING_AGE = 15;
     // The age to which a tiger can live.
-    private static final int MAX_AGE = 250;
+    private static final int MAX_AGE = 500;
     // The likelihood of a tiger breeding.
-    private static final double BREEDING_PROBABILITY = 0.05;
+    private static final double BREEDING_PROBABILITY = 0.005;
     // The maximum number of births.
-    private static final int MAX_LITTER_SIZE = 1;
+    private static final int MAX_LITTER_SIZE = 3;
     // The food value of a single tiger
-    static final int TIGER_FOOD_VALUE = 20;
+    static final int TIGER_FOOD_VALUE = 50;
+
+    private static final Color COLOUR = Color.red;
 
     public Tiger(boolean randomAge){
         super(randomAge);
@@ -66,4 +70,8 @@ public class Tiger extends Animal {
         return newLocation;
     }
 
+    @Override
+    public Color getColour() {
+        return COLOUR;
+    }
 }

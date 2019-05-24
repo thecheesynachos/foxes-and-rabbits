@@ -6,6 +6,4 @@ public interface Observer {
 
 	void attachTo(Subject subject);
 
-	Subject getAttachedSubject();
-
 }

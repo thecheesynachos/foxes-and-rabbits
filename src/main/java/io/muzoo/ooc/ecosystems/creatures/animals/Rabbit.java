@@ -3,6 +3,7 @@ package io.muzoo.ooc.ecosystems.creatures.animals;
 import io.muzoo.ooc.ecosystems.simulation.Field;
 import io.muzoo.ooc.ecosystems.simulation.helpers.Location;
 
+import java.awt.*;
 import java.util.Iterator;
 
 /**
@@ -26,6 +27,7 @@ public class Rabbit extends Animal{
     // The food value of a single rabbit. In effect, this is the
     // number of steps a fox can go before it has to eat again.
     static final int RABBIT_FOOD_VALUE = 5;
+    private static final Color COLOUR = Color.yellow;
 
     /**
      * Create a new rabbit. A rabbit may be created with age
@@ -86,4 +88,8 @@ public class Rabbit extends Animal{
         return new Rabbit(true);
     }
 
+    @Override
+    public Color getColour() {
+        return COLOUR;
+    }
 }

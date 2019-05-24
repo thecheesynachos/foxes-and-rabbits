@@ -1,25 +1,22 @@
 package io.muzoo.ooc.ecosystems.simulation;
 
-import io.muzoo.ooc.ecosystems.creatures.Actor;
-import io.muzoo.ooc.ecosystems.observer.Observer;
-import io.muzoo.ooc.ecosystems.observer.Subject;
+import io.muzoo.ooc.ecosystems.observer.SimulatorView;
 
-import java.util.ArrayList;
-import java.util.List;
 
-public class SimulationFacade implements Subject {
+public class SimulationFacade {
 
 	private Simulator simulator;
 	private Field field;
 	private FieldStats fieldStats;
-	private List<Observer> observers;
+	private SimulatorView simulatorView;
 	private int step;
 
 	public SimulationFacade(int depth, int width){
-		simulator = new Simulator(depth, width);
+		simulator = new Simulator(depth, width, this);
 		field = new Field(depth, width);
 		fieldStats = new FieldStats();
-		observers = new ArrayList<>();
+		simulatorView = new SimulatorView(depth, width, this);
+		simulatorView.attachTo(simulator);
 		reset();
 	}
 
@@ -28,8 +25,6 @@ public class SimulationFacade implements Subject {
 		field.clear();
 		simulator.populate(field);
 		this.step = 0;
-		// Show the starting state in the view.
-		notifyObservers();
 	}
 
 	public void simulate(int numSteps){
@@ -39,20 +34,12 @@ public class SimulationFacade implements Subject {
 	}
 
 	private void simulateOneStep(){
-
 		simulator.simulateOneStep(this);
-
-		List<Actor> liveActors = simulator.getCurrentLiveActors();
-		fieldStats.generateCounts(liveActors);
-		fieldStats.countFinished();
-		step++;
-
-		// display the new field on screen
-		notifyObservers();
-
 	}
 
-
+	public void incrementStep(){
+		step++;
+	}
 
 	public Field getField() {
 		return field;
@@ -70,21 +57,4 @@ public class SimulationFacade implements Subject {
 		return step;
 	}
 
-	@Override
-	public List<Observer> getObservers() {
-		return observers;
-	}
-
-	@Override
-	public void notifyObservers() {
-		for(Observer observer : observers){
-			observer.update();
-		}
-	}
-
-	@Override
-	public void attachObserver(Observer observer) {
-		observers.add(observer);
-		observer.attachTo(this);
-	}
 }

@@ -5,6 +5,7 @@ import io.muzoo.ooc.ecosystems.simulation.Field;
 import io.muzoo.ooc.ecosystems.simulation.helpers.Location;
 import io.muzoo.ooc.ecosystems.simulation.helpers.Randomer;
 
+import java.awt.*;
 import java.util.Iterator;
 import java.util.List;
 
@@ -12,6 +13,8 @@ public class Hunter extends Actor {
 
     // the probability that a hunter just disappears (arrested maybe)
     private static final double GONE_FACTOR = 0.001;
+
+    private static final Color COLOUR = Color.black;
 
     public Hunter(){
         super();
@@ -55,4 +58,8 @@ public class Hunter extends Actor {
         return where;
     }
 
+    @Override
+    public Color getColour() {
+        return COLOUR;
+    }
 }

@@ -14,11 +14,11 @@ public class ActorFactory {
     // The probability that a rabbit will be created in any given grid position.
     private static final double RABBIT_CREATION_PROBABILITY = 0.3;
     // The probability that a fox will be created in any given grid position.
-    private static final double FOX_CREATION_PROBABILITY = 0.2;
+    private static final double FOX_CREATION_PROBABILITY = 0.15;
     // The probability that a tiger will be created in any given grid position.
-    private static final double TIGER_CREATION_PROBABILITY = 0.15;
+    private static final double TIGER_CREATION_PROBABILITY = 0.05;
     // The probability that a hunter will be created in a grid position
-    private static final double HUNTER_CREATION_PROBABILITY = 0.01;
+    private static final double HUNTER_CREATION_PROBABILITY = 0.005;
 
     private static final double[] ACTOR_CREATION_PROBABILITIES = new double[]{
             RABBIT_CREATION_PROBABILITY,

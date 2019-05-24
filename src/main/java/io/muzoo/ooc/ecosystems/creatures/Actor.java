@@ -4,6 +4,7 @@ import io.muzoo.ooc.ecosystems.creatures.animals.Animal;
 import io.muzoo.ooc.ecosystems.simulation.Field;
 import io.muzoo.ooc.ecosystems.simulation.helpers.Location;
 
+import java.awt.*;
 import java.util.List;
 
 public abstract class Actor {
@@ -12,6 +13,7 @@ public abstract class Actor {
     protected Location location;
     // Whether the actor is alive or not.
     protected boolean alive;
+
 
     /**
      * Set the animal's location.
@@ -56,5 +58,7 @@ public abstract class Actor {
      * How this is chosen should depend on the type of actor (e.g. find food, random, run away)
      */
     protected abstract Location huntToNextLocation(Field currentField, Field updatedField);
+
+    public abstract Color getColour();
 
 }

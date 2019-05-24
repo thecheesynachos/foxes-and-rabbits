@@ -2,6 +2,8 @@ package io.muzoo.ooc.ecosystems.simulation;
 
 import io.muzoo.ooc.ecosystems.creatures.*;
 import io.muzoo.ooc.ecosystems.creatures.animals.Animal;
+import io.muzoo.ooc.ecosystems.observer.Observer;
+import io.muzoo.ooc.ecosystems.observer.Subject;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -14,7 +16,7 @@ import java.util.Collections;
  * @author David J. Barnes and Michael Kolling
  * @version 2002.10.28
  */
-public class Simulator {
+public class Simulator implements Subject {
     // The private static final variables represent 
     // configuration information for the simulation.
     // The default width for the grid.
@@ -29,11 +31,14 @@ public class Simulator {
     // A second field, used to build the next stage of the simulation.
     private Field updatedField;
 
+    private SimulationFacade sf;
+    private Observer observer;
+
     /**
      * Construct a simulation field with default size.
      */
     public Simulator() {
-        this(DEFAULT_DEPTH, DEFAULT_WIDTH);
+        this(DEFAULT_DEPTH, DEFAULT_WIDTH, null);
     }
 
     /**
@@ -42,7 +47,7 @@ public class Simulator {
      * @param depth Depth of the field. Must be greater than zero.
      * @param width Width of the field. Must be greater than zero.
      */
-    public Simulator(int depth, int width) {
+    public Simulator(int depth, int width, SimulationFacade sf) {
         if (width <= 0 || depth <= 0) {
             System.out.println("The dimensions must be greater than zero.");
             System.out.println("Using default values.");
@@ -52,6 +57,8 @@ public class Simulator {
         liveActors = new ArrayList<>();
         newAnimals = new ArrayList<>();
         updatedField = new Field(depth, width);
+
+        this.sf = sf;
 
         // Setup a valid starting point.
         reset();
@@ -84,6 +91,13 @@ public class Simulator {
 
         updatedField.growGrass();
         simulationFacade.setField(updatedField);
+
+        List<Actor> liveActors = getCurrentLiveActors();
+        sf.getFieldStats().generateCounts(liveActors);
+        sf.getFieldStats().countFinished();
+        sf.incrementStep();
+
+        notifyObserver();
 
     }
 
@@ -122,4 +136,13 @@ public class Simulator {
         return liveActors;
     }
 
+    @Override
+    public void notifyObserver() {
+        this.observer.update();
+    }
+
+    @Override
+    public void getAttachedBy(Observer observer) {
+        this.observer = observer;
+    }
 }

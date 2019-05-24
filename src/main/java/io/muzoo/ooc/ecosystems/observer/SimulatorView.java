@@ -1,17 +1,12 @@
 package io.muzoo.ooc.ecosystems.observer;
 
 import io.muzoo.ooc.ecosystems.creatures.Actor;
-import io.muzoo.ooc.ecosystems.creatures.Hunter;
-import io.muzoo.ooc.ecosystems.creatures.animals.Fox;
-import io.muzoo.ooc.ecosystems.creatures.animals.Rabbit;
-import io.muzoo.ooc.ecosystems.creatures.animals.Tiger;
 import io.muzoo.ooc.ecosystems.simulation.Field;
 import io.muzoo.ooc.ecosystems.simulation.FieldStats;
 import io.muzoo.ooc.ecosystems.simulation.SimulationFacade;
 
 import java.awt.*;
 import javax.swing.*;
-import java.util.HashMap;
 
 /**
  * A graphical view of the simulation grid.
@@ -27,25 +22,19 @@ public class SimulatorView extends JFrame implements Observer {
     // Colors used for empty locations.
     private static final Color EMPTY_COLOR = Color.white;
 
-    // Color used for objects that have no defined color.
-    private static final Color UNKNOWN_COLOR = Color.gray;
-
     private final String STEP_PREFIX = "Step: ";
     private final String POPULATION_PREFIX = "Population: ";
     private JLabel stepLabel, population;
     private FieldView fieldView;
 
-    // A map for storing colors for participants in the simulation
-    private HashMap<Class, Color> colors;
-
-    // Observed object
-    private Subject subject;
+    private SimulationFacade sf;
 
     /**
      * Create a view of the given width and height.
      */
-    public SimulatorView(int height, int width) {
-        colors = new HashMap<>();
+    public SimulatorView(int height, int width, SimulationFacade sf) {
+
+        this.sf = sf;
 
         setTitle("Fox and Rabbit Simulation");
         stepLabel = new JLabel(STEP_PREFIX, JLabel.CENTER);
@@ -55,10 +44,6 @@ public class SimulatorView extends JFrame implements Observer {
 
         fieldView = new FieldView(height, width);
 
-        setColor(Fox.class, Color.blue);
-        setColor(Rabbit.class, Color.yellow);
-        setColor(Tiger.class, Color.red);
-        setColor(Hunter.class, Color.black);
 
         Container contents = getContentPane();
         contents.add(stepLabel, BorderLayout.NORTH);
@@ -69,36 +54,13 @@ public class SimulatorView extends JFrame implements Observer {
     }
 
     /**
-     * Define a color to be used for a given class of animal.
-     *
-     * @param animalClass The animal's Class object.
-     * @param color       The color to be used for the given class.
-     */
-    public void setColor(Class animalClass, Color color) {
-        colors.put(animalClass, color);
-    }
-
-    /**
-     * @return The color to be used for a given class of animal.
-     */
-    private Color getColor(Class animalClass) {
-        Color col = colors.get(animalClass);
-        if (col == null) {
-            // no color defined for this class
-            return UNKNOWN_COLOR;
-        } else {
-            return col;
-        }
-    }
-
-    /**
      * Show the current status of the field.
      *
-     * @param step             Which iteration step it is.
      * @param simulationFacade Simulation facade to draw.
      */
-    public void showStatus(int step, SimulationFacade simulationFacade) {
+    public void showStatus(SimulationFacade simulationFacade) {
 
+        int step = simulationFacade.getStep();
         Field field = simulationFacade.getField();
         FieldStats stats = simulationFacade.getFieldStats();
 
@@ -113,7 +75,7 @@ public class SimulatorView extends JFrame implements Observer {
             for (int col = 0; col < field.getWidth(); col++) {
                 Actor animal = field.getActorAt(row, col);
                 if (animal != null) {
-                    fieldView.drawMark(col, row, getColor(animal.getClass()));
+                    fieldView.drawMark(col, row, animal.getColour());
                 } else {
                     fieldView.drawMark(col, row, EMPTY_COLOR);
                 }
@@ -127,21 +89,14 @@ public class SimulatorView extends JFrame implements Observer {
 
     @Override
     public void update() {
-        SimulationFacade sf = (SimulationFacade) subject;
-        int step = sf.getStep();
-        showStatus(step, sf);
+        showStatus(sf);
     }
+
 
     @Override
     public void attachTo(Subject subject) {
-        this.subject = subject;
+        subject.getAttachedBy(this);
     }
-
-    @Override
-    public Subject getAttachedSubject() {
-        return subject;
-    }
-
 
     /**
      * Provide a graphical view of a rectangular field. This is

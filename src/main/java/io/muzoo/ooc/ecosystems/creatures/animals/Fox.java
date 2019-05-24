@@ -4,6 +4,8 @@ import io.muzoo.ooc.ecosystems.simulation.Field;
 import io.muzoo.ooc.ecosystems.simulation.helpers.Location;
 import io.muzoo.ooc.ecosystems.simulation.helpers.Randomer;
 
+import java.awt.*;
+
 /**
  * A simple model of a fox.
  * Foxes age, move, eat rabbits, and die.
@@ -24,6 +26,8 @@ public class Fox extends Animal {
     private static final int MAX_LITTER_SIZE = 2;
     // The food value of a single fox
     private static final int FOX_FOOD_VALUE = 10;
+
+    private static final Color COLOUR = Color.blue;
 
     // Individual characteristics (instance fields).
 
@@ -49,6 +53,11 @@ public class Fox extends Animal {
             newLocation = updatedField.freeAdjacentLocation(location);
         }
         return newLocation;
+    }
+
+    @Override
+    public Color getColour() {
+        return COLOUR;
     }
 
     @Override
